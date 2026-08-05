@@ -37,17 +37,11 @@ function CameraRig() {
   return null;
 }
 
-export function HeroScene({
-  className,
-  style,
-}: {
-  className?: string;
-  style?: React.CSSProperties;
-}) {
+export function HeroScene({ className }: { className?: string }) {
   const [degraded, setDegraded] = useState(false);
 
   return (
-    <div className={className} style={style}>
+    <div className={className}>
       <Canvas
         shadows="soft"
         dpr={degraded ? [1, 1] : [1, 1.75]}

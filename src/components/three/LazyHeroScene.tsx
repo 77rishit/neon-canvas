@@ -14,19 +14,13 @@ function SceneFallback() {
   );
 }
 
-export function LazyHeroScene({
-  className,
-  style,
-}: {
-  className?: string;
-  style?: React.CSSProperties;
-}) {
+export function LazyHeroScene({ className }: { className?: string }) {
   const hydrated = useHydrated();
   if (!hydrated) return <SceneFallback />;
 
   return (
     <Suspense fallback={<SceneFallback />}>
-      <HeroScene className={className ?? ""} style={style ?? {}} />
+      <HeroScene className={className ?? ""} />
     </Suspense>
   );
 }
