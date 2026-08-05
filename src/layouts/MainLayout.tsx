@@ -38,7 +38,9 @@ export function MainLayout({ children }: { children: ReactNode }) {
       <LoadingScreen />
       <ScrollProgress />
       <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <LightBeams />
         <ParticleField />
+
         <span className="absolute -left-32 top-[12%] h-[26rem] w-[26rem] rounded-full bg-primary/10 blur-[120px] animate-blob" />
         <span className="absolute -right-24 top-[48%] h-[30rem] w-[30rem] rounded-full bg-secondary/10 blur-[140px] animate-blob [animation-delay:-6s]" />
         <span className="absolute left-1/3 bottom-[-10%] h-[24rem] w-[24rem] rounded-full bg-primary/[0.07] blur-[130px] animate-blob [animation-delay:-12s]" />
