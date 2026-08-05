@@ -46,11 +46,11 @@ export function useTextReveal<T extends HTMLElement = HTMLHeadingElement>(
       const tl = gsap.timeline({
         defaults: { ease: "expo.out" },
         delay,
-        paused: !immediate,
         ...(immediate
           ? {}
           : { scrollTrigger: { trigger: el, start, once: true } }),
       });
+
 
       tl.fromTo(
         targets,
@@ -64,7 +64,7 @@ export function useTextReveal<T extends HTMLElement = HTMLHeadingElement>(
         },
       );
 
-      if (immediate) tl.play();
+
     }, el);
 
     return () => {
