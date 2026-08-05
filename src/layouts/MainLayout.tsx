@@ -36,6 +36,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         Skip to content
       </a>
       <LoadingScreen />
+      <ScrollProgress />
       <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <ParticleField />
         <span className="absolute -left-32 top-[12%] h-[26rem] w-[26rem] rounded-full bg-primary/10 blur-[120px] animate-blob" />
@@ -49,6 +50,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
       <main className="relative z-10">
         <PageTransition>{children}</PageTransition>
       </main>
+      <Footer />
     </div>
   );
 }
