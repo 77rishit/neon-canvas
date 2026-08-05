@@ -61,7 +61,7 @@ export function Timeline() {
     <Section
       id="timeline"
       eyebrow="Schedule"
-      title="Three days, minute by minute"
+      title="Five days, minute by minute"
       description="Click any milestone to expand the detail. Full session-level timings drop in the fest app one week before doors."
     >
       <ol ref={listRef} className="relative ml-3 space-y-5 pl-8 sm:ml-6 sm:pl-12">

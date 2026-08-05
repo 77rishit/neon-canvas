@@ -18,7 +18,7 @@ const PILLARS = [
   {
     icon: FiUsers,
     title: "One campus, every discipline",
-    summary: "Coders, designers, hardware tinkerers and casters share the same three days.",
+    summary: "Coders, designers, hardware tinkerers and casters share the same five days.",
     detail:
       "240 colleges send teams across nine states. Cross-disciplinary teams get priority for mentor slots because the strongest submissions historically pair a systems engineer with a designer.",
     tone: "secondary" as const,
@@ -28,7 +28,7 @@ const PILLARS = [
     title: "Industry in the room",
     summary: "Partner engineers mentor, judge and recruit throughout the weekend.",
     detail:
-      "Our title and platinum partners staff a recruiter lounge for all three days. Last edition, 180 participants left with internship or full-time offers directly from fest interviews.",
+      "Our title and platinum partners staff a recruiter lounge for all five days. Last edition, 180 participants left with internship or full-time offers directly from fest interviews.",
     tone: "primary" as const,
   },
 ];
@@ -41,7 +41,7 @@ export function About() {
       id="about"
       eyebrow="About the fest"
       title="Where the country's builders collide"
-      description={`${FEST.name} ${FEST.edition} runs ${FEST.dates} at the ${FEST.venue}. Three days, forty-eight tracks and a single rule: ship something real.`}
+      description={`${FEST.name} ${FEST.edition} runs ${FEST.dates} at the ${FEST.venue}. Five days, forty-eight tracks and a single rule: ship something real.`}
       className="relative"
     >
       <ParallaxBackdrop />

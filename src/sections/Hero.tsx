@@ -138,7 +138,7 @@ export function Hero() {
             data-hero-item
             className="mt-7 max-w-lg text-pretty text-base leading-relaxed text-muted-foreground opacity-0 md:text-lg"
           >
-            Three days of{" "}
+            Five days of{" "}
             <span className="text-foreground">
               {typed}
               <span className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[0.14em] bg-primary" />

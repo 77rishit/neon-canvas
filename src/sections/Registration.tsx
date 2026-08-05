@@ -260,7 +260,7 @@ export function Registration() {
             {[
               "Use your college email where possible — it speeds up ID verification.",
               "Team leads register once per event and add members from the dashboard link in the confirmation mail.",
-              "Registrations close on 10 March or when a track fills up, whichever comes first.",
+              "Registrations close on 20 December or when a track fills up, whichever comes first.",
               "Outstation participants can request subsidised accommodation from the same confirmation mail.",
             ].map((line) => (
               <li key={line} className="flex gap-3">
