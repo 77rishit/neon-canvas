@@ -213,7 +213,7 @@ export const SPONSORS = [
   { name: "Hexaform", tier: "Gold" },
   { name: "Lumendrive", tier: "Gold" },
   { name: "Orbital AI", tier: "Gold" },
-  { name: "Струк Labs", tier: "Silver" },
+  { name: "Strux Labs", tier: "Silver" },
   { name: "Pulsewave", tier: "Silver" },
   { name: "Corebyte", tier: "Silver" },
 ] as const;
