@@ -1,6 +1,7 @@
+import { memo } from "react";
 import { motion } from "framer-motion";
 
-export function ScrollIndicator({ href = "#about" }: { href?: string }) {
+function ScrollIndicatorBase({ href = "#about" }: { href?: string }) {
   return (
     <motion.a
       href={href}
@@ -23,5 +24,7 @@ export function ScrollIndicator({ href = "#about" }: { href?: string }) {
     </motion.a>
   );
 }
+
+export const ScrollIndicator = memo(ScrollIndicatorBase);
 
 export default ScrollIndicator;

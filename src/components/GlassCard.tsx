@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 import { motion, type HTMLMotionProps } from "framer-motion";
 import { cn } from "@/utils/cn";
 
@@ -14,7 +14,7 @@ export interface GlassCardProps extends Omit<HTMLMotionProps<"div">, "children">
  * Glass surface with an animated neon border + hover lift.
  * The border is a masked gradient ring that brightens on hover.
  */
-export function GlassCard({
+function GlassCardBase({
   className,
   children,
   tone = "primary",
@@ -57,5 +57,7 @@ export function GlassCard({
     </motion.div>
   );
 }
+
+export const GlassCard = memo(GlassCardBase);
 
 export default GlassCard;

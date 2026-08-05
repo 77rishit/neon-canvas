@@ -23,7 +23,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground">
+    <div className="relative min-h-dvh bg-background text-foreground">
       <LoadingScreen />
       <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <ParticleField />

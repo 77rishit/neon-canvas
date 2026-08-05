@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from "react";
+import { memo, useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { cn } from "@/utils/cn";
 
@@ -6,7 +6,7 @@ import { cn } from "@/utils/cn";
  * Parallax decorative backdrop for content sections: two drifting neon blobs,
  * a grid plane and a scanline veil, all driven by section scroll progress.
  */
-export function ParallaxBackdrop({
+function ParallaxBackdropBase({
   className,
   align = "right",
   children,
@@ -56,5 +56,7 @@ export function ParallaxBackdrop({
     </div>
   );
 }
+
+export const ParallaxBackdrop = memo(ParallaxBackdropBase);
 
 export default ParallaxBackdrop;
