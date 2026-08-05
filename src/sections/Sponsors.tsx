@@ -72,7 +72,7 @@ export function Sponsors() {
       id="sponsors"
       eyebrow="Sponsors"
       title="Backed by the industry"
-      description="Nine partners fund the prize pool, staff the mentor desks and run the recruiter lounge across all three days."
+      description="Nine partners fund the prize pool, staff the mentor desks and run the recruiter lounge across all five days."
     >
       <div
         ref={listRef}

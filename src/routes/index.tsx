@@ -3,7 +3,7 @@ import { Home } from "@/pages/Home";
 
 const TITLE = "NEO//GRID Techfest 2026 — Hackathon, Robotics & Esports";
 const DESCRIPTION =
-  "NEO//GRID Techfest 2026: three days of hackathons, combat robotics, esports and hands-on labs in Bengaluru, 12-14 March. Register free.";
+  "NEO//GRID Techfest 2026: five days of hackathons, combat robotics, esports and hands-on labs in Bengaluru, 24-28 December. Register free.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,8 +24,8 @@ export const Route = createFileRoute("/")({
           "@type": "Event",
           name: "NEO//GRID Techfest 2026",
           description: DESCRIPTION,
-          startDate: "2026-03-12",
-          endDate: "2026-03-14",
+          startDate: "2026-12-24",
+          endDate: "2026-12-28",
           eventStatus: "https://schema.org/EventScheduled",
           eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
           location: {

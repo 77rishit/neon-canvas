@@ -42,7 +42,7 @@ export function Gallery() {
       id="gallery"
       eyebrow="Gallery"
       title="Last edition, in frames"
-      description="Twelve thousand participants, three stages and seventy-two hours of continuous build time. Click any frame to open the lightbox."
+      description="Twelve thousand participants, three stages and one hundred and twenty hours of continuous build time. Click any frame to open the lightbox."
     >
       <div
         className="grid auto-rows-[minmax(0,1fr)] grid-flow-dense grid-cols-2 gap-4 [grid-auto-rows:14rem] md:grid-cols-3 md:[grid-auto-rows:16rem]"

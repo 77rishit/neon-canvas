@@ -10,7 +10,7 @@ import keynoteImg from "@/assets/fest-keynote.jpg";
 export const FEST = {
   name: "NEO//GRID TECHFEST",
   edition: "2026",
-  dates: "12 — 14 March 2026",
+  dates: "24 — 28 December 2026",
   venue: "Institute of Advanced Technology, Bengaluru",
   email: "hello@neogridfest.dev",
   phone: "+91 80 4000 1200",
@@ -44,7 +44,7 @@ export const EVENTS: FestEvent[] = [
     longDescription:
       "HyperHack is the flagship build sprint of the fest. Teams receive sealed problem statements at midnight and have 36 hours to design, build and deploy a working prototype. Mentors from partner companies rotate every six hours, and the top eight teams pitch on the main stage to a panel of founders and investors.",
     image: hackathonImg,
-    date: "12 — 13 March",
+    date: "24 — 25 December",
     time: "22:00 IST",
     venue: "Innovation Hall A",
     difficulty: "Advanced",
@@ -65,7 +65,7 @@ export const EVENTS: FestEvent[] = [
     longDescription:
       "BotWars runs two parallel brackets inside a reinforced 6x6 metre arena. The autonomous track scores on navigation accuracy and objective capture, while the combat track is a straight single-elimination bracket. Safety inspection is mandatory before every match.",
     image: roboticsImg,
-    date: "13 March",
+    date: "26 December",
     time: "10:00 IST",
     venue: "Robotics Arena",
     difficulty: "Advanced",
@@ -84,9 +84,9 @@ export const EVENTS: FestEvent[] = [
     description:
       "Valorant, Rocket League and a retro arcade gauntlet played out on a full LED main stage with live casters.",
     longDescription:
-      "GridClash is a fully casted LAN tournament across three titles. Group stages run on day one, playoffs move to the main stage on day two. All peripherals are provided; players may bring their own keyboards and mice after inspection.",
+      "GridClash is a fully casted LAN tournament across three titles. Group stages run on day four, playoffs move to the main stage on the closing day. All peripherals are provided; players may bring their own keyboards and mice after inspection.",
     image: esportsImg,
-    date: "13 — 14 March",
+    date: "27 — 28 December",
     time: "12:00 IST",
     venue: "Main Stage Arena",
     difficulty: "Intermediate",
@@ -105,9 +105,9 @@ export const EVENTS: FestEvent[] = [
     description:
       "A full track of talks and workshops on applied AI, realtime graphics, edge systems and developer tooling.",
     longDescription:
-      "The DeepStack Summit runs across all three days with keynote sessions in the morning and hands-on labs in the afternoon. Labs are capped at 60 seats each and allocated on a first-come basis to registered attendees. Bring a laptop.",
+      "The DeepStack Summit runs across all five days with keynote sessions in the morning and hands-on labs in the afternoon. Labs are capped at 60 seats each and allocated on a first-come basis to registered attendees. Bring a laptop.",
     image: keynoteImg,
-    date: "12 — 14 March",
+    date: "24 — 28 December",
     time: "09:30 IST",
     venue: "Auditorium 1",
     difficulty: "Beginner",
@@ -238,7 +238,7 @@ export const SCHEDULE = [
   {
     id: "day0",
     day: "Pre-fest",
-    date: "10 March",
+    date: "20 December",
     title: "Registrations close",
     detail:
       "Final rosters are locked, team IDs are mailed out and problem statement teasers drop across our socials.",
@@ -246,7 +246,7 @@ export const SCHEDULE = [
   {
     id: "day1",
     day: "Day 01",
-    date: "12 March",
+    date: "24 December",
     title: "Opening ceremony & DeepStack keynotes",
     detail:
       "Doors at 08:00. Opening keynote at 09:30, followed by the first lab block and the HyperHack midnight kickoff.",
@@ -254,15 +254,31 @@ export const SCHEDULE = [
   {
     id: "day2",
     day: "Day 02",
-    date: "13 March",
-    title: "BotWars, GridClash groups & hack finals",
+    date: "25 December",
+    title: "HyperHack finals & maker labs",
     detail:
-      "The arena opens at 10:00 for robotics brackets while esports group stages run in parallel. HyperHack pitches begin at 18:00.",
+      "Thirty-six hours of building wrap at 10:00, the top eight teams pitch from 18:00 and the maker labs run all afternoon.",
   },
   {
     id: "day3",
     day: "Day 03",
-    date: "14 March",
+    date: "26 December",
+    title: "BotWars Arena brackets",
+    detail:
+      "The reinforced arena opens at 10:00 for autonomous runs, with combat single-elimination matches through the evening.",
+  },
+  {
+    id: "day4",
+    day: "Day 04",
+    date: "27 December",
+    title: "GridClash group stages",
+    detail:
+      "Valorant, Rocket League and the retro gauntlet run in parallel on the LED stage with full live casting.",
+  },
+  {
+    id: "day5",
+    day: "Day 05",
+    date: "28 December",
     title: "Grand finals, awards & closing set",
     detail:
       "Esports playoffs on the main stage, prize distribution at 19:00 and an audio-reactive closing performance to shut it down.",
