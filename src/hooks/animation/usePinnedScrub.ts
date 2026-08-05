@@ -57,12 +57,13 @@ export function usePinnedScrub<T extends HTMLElement = HTMLDivElement>({
 
         gsap.fromTo(
           items,
-          { y: 40, opacity: 0 },
+          { y: 44, opacity: 0, scale: 0.97 },
           {
             y: 0,
             opacity: 1,
-            duration: 0.7,
-            ease: "power3.out",
+            scale: 1,
+            duration: 0.8,
+            ease: "back.out(1.4)",
             stagger: 0.08,
             scrollTrigger: { trigger: el, start: "top 85%", once: true },
           },
