@@ -19,6 +19,21 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ProfessionalService",
+          name: "NEO//GRID",
+          description:
+            "Realtime graphics and motion design studio building 3D web interfaces.",
+          url: "/",
+          areaServed: "Worldwide",
+        }),
+      },
+    ],
   }),
   component: Home,
 });

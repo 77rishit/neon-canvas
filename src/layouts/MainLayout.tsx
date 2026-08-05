@@ -24,6 +24,13 @@ export function MainLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="relative min-h-dvh bg-background text-foreground">
+      {/* Keyboard users can jump past the fixed nav and decorative layers. */}
+      <a
+        href="#home"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[110] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:font-display focus:text-sm focus:text-primary-foreground"
+      >
+        Skip to content
+      </a>
       <LoadingScreen />
       <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <ParticleField />
