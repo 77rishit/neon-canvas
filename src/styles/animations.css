@@ -96,3 +96,117 @@
     cursor: none !important;
   }
 }
+
+/* ---------- Premium effects layer ---------- */
+
+@keyframes ripple {
+  from {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@utility animate-ripple {
+  animation: ripple 0.62s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes noise-shift {
+  0% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(-3%, 2%, 0); }
+  50% { transform: translate3d(2%, -3%, 0); }
+  75% { transform: translate3d(-2%, -2%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@utility animate-noise-shift {
+  animation: noise-shift 8s steps(6) infinite;
+}
+
+@keyframes border-spin {
+  to { transform: rotate(1turn); }
+}
+
+/* Rotating conic neon ring around a rounded surface */
+@utility neon-border-anim {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      var(--primary) 60deg,
+      transparent 140deg,
+      var(--secondary) 240deg,
+      transparent 330deg
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    animation: border-spin 6s linear infinite;
+    pointer-events: none;
+  }
+  &:hover::before {
+    opacity: 0.9;
+  }
+}
+
+/* Pointer-following light wash inside a card */
+@utility hover-light {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      220px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in srgb, var(--primary) 16%, transparent),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+@keyframes blob-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(4%, -6%, 0) scale(1.08); }
+  66% { transform: translate3d(-5%, 4%, 0) scale(0.94); }
+}
+
+@utility animate-blob {
+  animation: blob-drift 18s ease-in-out infinite;
+}
+
+@utility neon-shadow {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--primary) 22%, transparent),
+    0 0 24px -6px var(--primary),
+    0 0 60px -20px var(--secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-blob,
+  .animate-noise-shift,
+  .neon-border-anim::before {
+    animation: none !important;
+  }
+}
