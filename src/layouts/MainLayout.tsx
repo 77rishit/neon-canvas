@@ -3,12 +3,14 @@ import { Navbar } from "@/components/Navbar";
 import { CustomCursor } from "@/components/CustomCursor";
 import { MouseGlow } from "@/components/MouseGlow";
 import { useLenis } from "@/hooks/useLenis";
+import { useScrollFx } from "@/hooks/useScrollFx";
 
 /**
  * App shell: smooth scroll, custom cursor, pointer glow and navigation.
  */
 export function MainLayout({ children }: { children: ReactNode }) {
   useLenis();
+  useScrollFx();
 
   useEffect(() => {
     const root = document.documentElement;
