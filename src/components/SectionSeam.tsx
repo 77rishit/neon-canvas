@@ -18,17 +18,19 @@ export function SectionSeam({ align = "center" }: { align?: "center" | "left" | 
     const mm = gsap.matchMedia();
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       const ctx = gsap.context(() => {
-        const trigger = {
+        // NOTE: each tween needs its own ScrollTrigger config object —
+        // GSAP mutates the vars it is handed, so sharing one breaks refresh().
+        const trigger = () => ({
           trigger: root,
           start: "top 92%",
           end: "bottom 42%",
           scrub: 0.6,
-        } as const;
+        });
 
         gsap.fromTo(
           "[data-seam-line]",
           { scaleX: 0 },
-          { scaleX: 1, ease: "none", scrollTrigger: trigger },
+          { scaleX: 1, ease: "none", scrollTrigger: trigger() },
         );
         gsap.fromTo(
           "[data-seam-node]",
@@ -37,7 +39,7 @@ export function SectionSeam({ align = "center" }: { align?: "center" | "left" | 
             left: "88%",
             opacity: 1,
             ease: "none",
-            scrollTrigger: trigger,
+            scrollTrigger: trigger(),
           },
         );
       }, root);
