@@ -1,0 +1,60 @@
+/* Reusable cyberpunk utilities & keyframes */
+
+@utility text-gradient-neon {
+  background-image: var(--gradient-neon);
+  background-clip: text;
+  color: transparent;
+}
+
+@utility glow-primary {
+  box-shadow: var(--shadow-glow);
+}
+
+@utility glow-secondary {
+  box-shadow: var(--shadow-glow-violet);
+}
+
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(0, 245, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 245, 255, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+@utility hover-scale {
+  transition: transform 0.2s ease;
+  &:hover {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@utility animate-flicker {
+  animation: flicker 3.5s infinite;
+}
+
+@utility animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
