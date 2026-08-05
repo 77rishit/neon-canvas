@@ -70,10 +70,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     <motion.button
       ref={magnetic ? magneticRef : ref}
       onPointerDown={handlePointerDown}
-      whileHover={disabled || loading ? undefined : { scale: 1.03 }}
-      whileTap={disabled || loading ? undefined : { scale: 0.97 }}
+      whileHover={disabled || loading ? {} : { scale: 1.03 }}
+      whileTap={disabled || loading ? {} : { scale: 0.97 }}
       disabled={disabled || loading}
-      aria-busy={loading || undefined}
+      aria-busy={loading}
       className={cn(
         "relative isolate overflow-hidden inline-flex items-center justify-center gap-2 rounded-md font-display font-semibold uppercase tracking-[0.14em]",
         "transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
