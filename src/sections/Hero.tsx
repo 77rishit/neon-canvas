@@ -1,45 +1,99 @@
 import { motion } from "framer-motion";
-import { Section } from "@/components/Section";
+import { HiArrowNarrowRight } from "react-icons/hi";
+import { FiPlay } from "react-icons/fi";
 import { Button } from "@/components/Button";
-import { fadeUp, stagger, viewportOnce } from "@/utils/motion";
+import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { ScrollIndicator } from "@/components/ScrollIndicator";
+import { useTypingText } from "@/hooks/useTypingText";
+import { fadeUp, stagger } from "@/utils/motion";
 
-/**
- * Scaffold hero. Replace the copy/visuals when the site build starts.
- */
+const PHRASES = ["neural interfaces.", "immersive 3D worlds.", "kinetic web systems."];
+
 export function Hero() {
+  const typed = useTypingText(PHRASES);
+
   return (
-    <Section id="home" flush className="flex min-h-screen items-center pt-24">
-      <motion.div
-        variants={stagger(0.12)}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewportOnce}
-        className="max-w-3xl"
-      >
-        <motion.span
-          variants={fadeUp}
-          className="font-display text-xs uppercase tracking-[0.4em] text-primary animate-flicker"
-        >
-          System online
-        </motion.span>
-        <motion.h1
-          variants={fadeUp}
-          className="mt-6 text-5xl font-bold leading-[1.05] md:text-7xl text-gradient-neon"
-        >
-          Cyberpunk starter kit
-        </motion.h1>
-        <motion.p variants={fadeUp} className="mt-6 max-w-xl text-lg text-muted-foreground">
-          React 19, Vite, Tailwind, React Three Fiber, Framer Motion, GSAP ScrollTrigger and Lenis —
-          wired up and ready for the real build.
-        </motion.p>
-        <motion.div variants={fadeUp} className="mt-10 flex flex-wrap gap-4">
-          <Button size="lg">Get started</Button>
-          <Button size="lg" variant="outline">
-            Documentation
-          </Button>
+    <section
+      id="home"
+      className="relative flex min-h-screen w-full items-center overflow-hidden"
+    >
+      <AnimatedBackground />
+
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pt-32 pb-28 md:pt-36">
+        <motion.div variants={stagger(0.12)} initial="hidden" animate="show" className="max-w-4xl">
+          <motion.div
+            variants={fadeUp}
+            className="inline-flex items-center gap-3 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5"
+          >
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-70" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+            </span>
+            <span className="font-display text-[0.6rem] uppercase tracking-[0.38em] text-primary">
+              System online — v2.0
+            </span>
+          </motion.div>
+
+          <motion.h1
+            variants={fadeUp}
+            className="mt-8 text-[clamp(2.75rem,9vw,7.5rem)] font-bold leading-[0.92] tracking-tight"
+          >
+            <span className="block text-foreground">Design beyond</span>
+            <span className="block text-gradient-neon">the interface</span>
+          </motion.h1>
+
+          <motion.p
+            variants={fadeUp}
+            className="mt-8 h-8 font-display text-lg text-muted-foreground md:text-2xl"
+          >
+            <span className="text-foreground/70">We build </span>
+            <span className="text-primary">{typed}</span>
+            <span className="ml-0.5 inline-block h-[1.05em] w-[2px] translate-y-[0.16em] bg-secondary animate-caret" />
+          </motion.p>
+
+          <motion.p
+            variants={fadeUp}
+            className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground"
+          >
+            A studio operating at the edge of realtime graphics and motion design — crafting
+            digital products that feel engineered, not decorated.
+          </motion.p>
+
+          <motion.div variants={fadeUp} className="mt-12 flex flex-wrap items-center gap-4">
+            <Button size="lg" className="group">
+              Launch Project
+              <HiArrowNarrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+            </Button>
+            <Button size="lg" variant="outline" className="group">
+              <FiPlay className="transition-transform duration-300 group-hover:scale-110" />
+              Showreel
+            </Button>
+          </motion.div>
+
+          <motion.dl
+            variants={fadeUp}
+            className="mt-16 flex flex-wrap gap-x-12 gap-y-6 border-t border-border pt-8"
+          >
+            {[
+              { k: "Projects shipped", v: "120+" },
+              { k: "Awards", v: "18" },
+              { k: "Avg. load", v: "0.9s" },
+            ].map((stat) => (
+              <div key={stat.k}>
+                <dt className="font-display text-[0.6rem] uppercase tracking-[0.3em] text-muted-foreground">
+                  {stat.k}
+                </dt>
+                <dd className="mt-1 font-display text-2xl font-bold text-gradient-neon">
+                  {stat.v}
+                </dd>
+              </div>
+            ))}
+          </motion.dl>
         </motion.div>
-      </motion.div>
-    </Section>
+      </div>
+
+      <ScrollIndicator href="#system" />
+    </section>
   );
 }
 
