@@ -29,7 +29,6 @@ export function splitText(el: HTMLElement): SplitResult | null {
     const span = document.createElement("span");
     span.className = "split-word";
     span.style.display = "inline-block";
-    span.style.willChange = "transform, opacity";
     span.textContent = value;
     return span;
   };
@@ -64,8 +63,9 @@ export function splitText(el: HTMLElement): SplitResult | null {
 
       const inner = document.createElement("span");
       inner.className = "split-line-inner";
+      // No will-change here on purpose: promoting these to their own layers
+      // breaks `background-clip: text` gradient headings in Chromium.
       inner.style.display = "block";
-      inner.style.willChange = "transform, opacity";
 
       rowWords.forEach((word, i) => {
         inner.appendChild(word);
