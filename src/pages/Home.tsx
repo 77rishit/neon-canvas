@@ -24,12 +24,23 @@ export function Home() {
   return (
     <MainLayout>
       <Hero />
-      <About />
-      <Features />
-      <Services />
+      {/* Each section gets its own signature entrance (see useScrollFx). */}
+      <div data-fx="fade-scale">
+        <About />
+      </div>
+      <div data-fx="left">
+        <Features />
+      </div>
+      <div data-fx="right">
+        <Services />
+      </div>
       <Process />
-      <Timeline />
-      <Statistics />
+      <div data-fx="clip">
+        <Timeline />
+      </div>
+      <div data-fx="rotate">
+        <Statistics />
+      </div>
       <Projects />
       <Testimonials />
       <FAQ />
