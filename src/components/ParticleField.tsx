@@ -57,8 +57,8 @@ export function ParticleField({ className = "" }: { className?: string }) {
 
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i];
-          const b = particles[j];
+          const a = particles[i]!;
+          const b = particles[j]!;
           const dx = a.x - b.x;
           const dy = a.y - b.y;
           const d2 = dx * dx + dy * dy;
