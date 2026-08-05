@@ -2,12 +2,15 @@ import { useEffect, useRef } from "react";
 import { gsap } from "@/utils/gsap";
 
 /**
- * Mouse-following spotlight. Writes `--spot-x` / `--spot-y` on the referenced
- * element through an eased gsap.quickTo, so the gradient trails the pointer
- * with inertia at zero React cost.
+ * Mouse-following spotlight.
+ *
+ * Translates the referenced element to the pointer through an eased
+ * gsap.quickTo, so the light trails with inertia on a single composited
+ * transform — no React state, no per-frame layout.
  */
 export function useSpotlight<T extends HTMLElement = HTMLDivElement>({
   duration = 0.9,
+  /** Track the pointer within the parent element instead of the viewport. */
   local = false,
 } = {}) {
   const ref = useRef<T>(null);
@@ -17,32 +20,34 @@ export function useSpotlight<T extends HTMLElement = HTMLDivElement>({
     if (!el) return;
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
-    const xTo = gsap.quickTo(el, "--spot-x", { duration, ease: "power3.out" });
-    const yTo = gsap.quickTo(el, "--spot-y", { duration, ease: "power3.out" });
-    const opacityTo = gsap.quickTo(el, "opacity", { duration: 0.6, ease: "power2.out" });
+    gsap.set(el, { xPercent: -50, yPercent: -50, opacity: 0 });
 
-    const target: HTMLElement | Window = local ? (el.parentElement ?? el) : window;
+    const xTo = gsap.quickTo(el, "x", { duration, ease: "power3.out" });
+    const yTo = gsap.quickTo(el, "y", { duration, ease: "power3.out" });
+    const fadeTo = gsap.quickTo(el, "opacity", { duration: 0.6, ease: "power2.out" });
+
+    const host: HTMLElement | Window = local ? (el.parentElement ?? el) : window;
 
     const onMove = (event: Event) => {
       const e = event as PointerEvent;
       if (local) {
-        const r = (target as HTMLElement).getBoundingClientRect();
+        const r = (host as HTMLElement).getBoundingClientRect();
         xTo(e.clientX - r.left);
         yTo(e.clientY - r.top);
       } else {
         xTo(e.clientX);
         yTo(e.clientY);
       }
-      opacityTo(1);
+      fadeTo(1);
     };
-    const onLeave = () => opacityTo(0);
+    const onLeave = () => fadeTo(0);
 
-    target.addEventListener("pointermove", onMove as EventListener, { passive: true });
-    target.addEventListener("pointerleave", onLeave as EventListener);
+    host.addEventListener("pointermove", onMove as EventListener, { passive: true });
+    host.addEventListener("pointerleave", onLeave as EventListener);
 
     return () => {
-      target.removeEventListener("pointermove", onMove as EventListener);
-      target.removeEventListener("pointerleave", onLeave as EventListener);
+      host.removeEventListener("pointermove", onMove as EventListener);
+      host.removeEventListener("pointerleave", onLeave as EventListener);
       gsap.killTweensOf(el);
     };
   }, [duration, local]);
