@@ -43,19 +43,21 @@ export function Testimonials() {
       const cards = gsap.utils.toArray<HTMLElement>("[data-stack-card]", el);
 
       cards.forEach((card, i) => {
-        if (i === cards.length - 1) return;
+        const next = cards[i + 1];
+        if (!next) return;
         gsap.to(card, {
           scale: 0.92,
           opacity: 0.55,
           ease: "none",
           scrollTrigger: {
-            trigger: cards[i + 1],
+            trigger: next,
             start: "top bottom",
             end: "top center",
             scrub: true,
           },
         });
       });
+
     });
 
     return () => mm.revert();
