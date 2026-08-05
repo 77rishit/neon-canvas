@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { FiStar } from "react-icons/fi";
+import { FiChevronDown } from "react-icons/fi";
+import { gsap } from "@/utils/gsap";
+import { useGsapContext } from "@/hooks/useGsapContext";
 import { Section } from "@/components/Section";
 import { GlassCard } from "@/components/GlassCard";
 import { ParallaxBackdrop } from "@/components/ParallaxBackdrop";
-import { Reveal, RevealItem } from "@/components/Reveal";
 
 const QUOTES = [
   {
@@ -29,7 +31,36 @@ const QUOTES = [
   },
 ];
 
+/**
+ * Testimonials as a scroll-driven card stack: each card sticks, then the next
+ * one slides over it while the one below scales back.
+ */
 export function Testimonials() {
+  const ref = useGsapContext<HTMLDivElement>((el) => {
+    const mm = gsap.matchMedia();
+
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const cards = gsap.utils.toArray<HTMLElement>("[data-stack-card]", el);
+
+      cards.forEach((card, i) => {
+        if (i === cards.length - 1) return;
+        gsap.to(card, {
+          scale: 0.92,
+          opacity: 0.55,
+          ease: "none",
+          scrollTrigger: {
+            trigger: cards[i + 1],
+            start: "top bottom",
+            end: "top center",
+            scrub: true,
+          },
+        });
+      });
+    });
+
+    return () => mm.revert();
+  }, []);
+
   return (
     <Section
       id="testimonials"
@@ -40,10 +71,15 @@ export function Testimonials() {
     >
       <ParallaxBackdrop align="right" />
 
-      <Reveal className="grid gap-5 lg:grid-cols-3">
+      <div ref={ref} className="relative mx-auto max-w-3xl">
         {QUOTES.map((q, i) => (
-          <RevealItem key={q.name}>
-            <GlassCard tone={i === 1 ? "secondary" : "primary"} className="flex h-full flex-col p-7">
+          <div
+            key={q.name}
+            data-stack-card
+            className="sticky top-28 mb-6 will-change-transform"
+            style={{ zIndex: i + 1 }}
+          >
+            <GlassCard tone={i === 1 ? "secondary" : "primary"} className="flex flex-col p-7 md:p-9">
               <div className="flex gap-1 text-primary">
                 {Array.from({ length: 5 }).map((_, s) => (
                   <motion.span
@@ -58,7 +94,7 @@ export function Testimonials() {
                 ))}
               </div>
 
-              <p className="mt-5 flex-1 text-base leading-relaxed text-foreground/85">
+              <p className="mt-5 text-lg leading-relaxed text-foreground/85 md:text-xl">
                 “{q.quote}”
               </p>
 
@@ -74,9 +110,13 @@ export function Testimonials() {
                 </div>
               </div>
             </GlassCard>
-          </RevealItem>
+          </div>
         ))}
-      </Reveal>
+
+        <p className="mt-10 flex items-center justify-center gap-2 text-xs uppercase tracking-[0.3em] text-muted-foreground">
+          Keep scrolling <FiChevronDown className="animate-bounce" />
+        </p>
+      </div>
     </Section>
   );
 }
