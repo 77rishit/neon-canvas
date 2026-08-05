@@ -142,10 +142,13 @@ export function useScrollFx() {
             return;
           }
 
+          // clearProps is essential: a lingering transform/filter/clip-path on a
+          // section wrapper would become the containing block for the fixed
+          // modals and lightbox rendered inside it.
           tl.fromTo(el, sig.from, {
             ...sig.to,
             duration: sig.duration ?? 0.9,
-            clearProps: "filter,clipPath",
+            clearProps: "filter,clipPath,transform,willChange",
           });
 
           if (childSelector) {

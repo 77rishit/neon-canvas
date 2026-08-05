@@ -28,7 +28,7 @@ export function Home() {
     <RegistrationProvider>
       <MainLayout>
         <Hero />
-        <div data-fx="blur-focus" data-depth="front">
+        <div data-fx="blur-focus">
           <About />
         </div>
         <div data-fx="slide-skew-left">
