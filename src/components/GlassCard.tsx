@@ -26,11 +26,10 @@ export function GlassCard({
       {...(still ? {} : { whileHover: { y: -6 } })}
       transition={{ type: "spring", stiffness: 260, damping: 22 }}
       className={cn(
-        "group/card glass-panel relative overflow-hidden rounded-2xl p-6 transition-colors duration-300",
+        "group/card glass-panel relative h-full overflow-hidden rounded-2xl transition-colors duration-300",
         tone === "primary"
           ? "hover:border-primary/45 hover:shadow-[0_0_38px_-12px_var(--primary)]"
           : "hover:border-secondary/45 hover:shadow-[0_0_38px_-12px_var(--secondary)]",
-        className,
       )}
       {...props}
     >
@@ -42,13 +41,14 @@ export function GlassCard({
       {/* corner ticks */}
       <span
         aria-hidden
-        className="pointer-events-none absolute left-0 top-0 h-4 w-4 border-l border-t border-primary/40 transition-colors duration-300 group-hover/card:border-primary"
+        className="pointer-events-none absolute left-0 top-0 z-20 h-4 w-4 border-l border-t border-primary/40 transition-colors duration-300 group-hover/card:border-primary"
       />
       <span
         aria-hidden
-        className="pointer-events-none absolute bottom-0 right-0 h-4 w-4 border-b border-r border-secondary/40 transition-colors duration-300 group-hover/card:border-secondary"
+        className="pointer-events-none absolute bottom-0 right-0 z-20 h-4 w-4 border-b border-r border-secondary/40 transition-colors duration-300 group-hover/card:border-secondary"
       />
-      <div className="relative z-10">{children}</div>
+      <div className={cn("relative z-10 h-full p-6", className)}>{children}</div>
+
     </motion.div>
   );
 }
