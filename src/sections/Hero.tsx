@@ -27,6 +27,7 @@ export function Hero() {
 
       <div
         aria-hidden
+        data-depth="mid"
         className="pointer-events-none absolute inset-0 z-0 opacity-60 md:left-auto md:right-0 md:w-[58%] md:opacity-95"
         style={{
           maskImage:
