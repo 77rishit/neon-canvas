@@ -24,14 +24,18 @@ export function Timeline() {
       <ParallaxBackdrop align="left" />
 
       <div className="relative">
-        {/* spine */}
+        {/* spine — a dim rail with a neon fill that tracks the scroll position */}
+        <span
+          aria-hidden
+          className="absolute left-[15px] top-2 h-full w-px bg-border/70 md:left-1/2"
+        />
         <motion.span
           aria-hidden
           initial={{ scaleY: 0 }}
           whileInView={{ scaleY: 1 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute left-[15px] top-2 h-full w-px origin-top bg-gradient-to-b from-primary via-secondary to-transparent md:left-1/2"
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute left-[15px] top-2 h-full w-px origin-top bg-gradient-to-b from-primary via-secondary to-transparent shadow-[0_0_14px_var(--primary)] md:left-1/2"
         />
 
         <Reveal className="space-y-8" delay={0.14}>

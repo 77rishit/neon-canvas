@@ -10,6 +10,11 @@ import { fadeUp, stagger } from "@/utils/motion";
 
 const PHRASES = ["neural interfaces.", "immersive 3D worlds.", "kinetic web systems."];
 
+const HEADING_LINES: { words: string[]; glow: boolean }[] = [
+  { words: ["Design", "beyond"], glow: false },
+  { words: ["the", "interface"], glow: true },
+];
+
 export function Hero() {
   const typed = useTypingText(PHRASES);
 
@@ -22,6 +27,7 @@ export function Hero() {
 
       <div
         aria-hidden
+        data-depth="mid"
         className="pointer-events-none absolute inset-0 z-0 opacity-60 md:left-auto md:right-0 md:w-[58%] md:opacity-95"
         style={{
           maskImage:
@@ -33,7 +39,7 @@ export function Hero() {
         <LazyHeroScene className="absolute inset-0" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pt-32 pb-28 md:pt-36">
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pt-32 pb-28 md:pt-36" data-depth="front">
         <motion.div variants={stagger(0.12)} initial="hidden" animate="show" className="max-w-4xl md:max-w-xl lg:max-w-2xl">
           <motion.div
             variants={fadeUp}
@@ -48,16 +54,35 @@ export function Hero() {
             </span>
           </motion.div>
 
-          <motion.h1
-            variants={fadeUp}
-            className="mt-8 text-[clamp(2.75rem,9vw,7.5rem)] font-bold leading-[0.92] tracking-tight"
-          >
-            <span className="block text-foreground">Design beyond</span>
-            <span className="block text-gradient-neon">the interface</span>
-          </motion.h1>
+          {/* Heading reveals line-by-line, word-by-word, from behind a mask. */}
+          <h1 className="mt-8 text-[clamp(2.75rem,9vw,7.5rem)] font-bold leading-[0.92] tracking-tight">
+            {HEADING_LINES.map((line, li) => (
+              <span key={li} className="block overflow-hidden pb-[0.08em]">
+                {line.words.map((word, wi) => (
+                  <motion.span
+                    key={word}
+                    initial={{ y: "110%", rotateZ: 4, opacity: 0 }}
+                    animate={{ y: "0%", rotateZ: 0, opacity: 1 }}
+                    transition={{
+                      duration: 0.95,
+                      delay: 0.35 + li * 0.14 + wi * 0.09,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className={`inline-block will-change-transform ${
+                      line.glow ? "text-gradient-neon" : "text-foreground"
+                    }`}
+                  >
+                    {word}
+                    {wi < line.words.length - 1 && <span>&nbsp;</span>}
+                  </motion.span>
+                ))}
+              </span>
+            ))}
+          </h1>
 
           <motion.p
             variants={fadeUp}
+            transition={{ delay: 0.9, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 h-8 font-display text-lg text-muted-foreground md:text-2xl"
           >
             <span className="text-foreground/70">We build </span>
@@ -67,18 +92,29 @@ export function Hero() {
 
           <motion.p
             variants={fadeUp}
+            transition={{ delay: 1.05, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground"
           >
             A studio operating at the edge of realtime graphics and motion design — crafting
             digital products that feel engineered, not decorated.
           </motion.p>
 
-          <motion.div variants={fadeUp} className="mt-12 flex flex-wrap items-center gap-4">
-            <Button size="lg" className="group">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, filter: "blur(8px)" }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              filter: "blur(0px)",
+              boxShadow: "0 0 0 0 transparent",
+            }}
+            transition={{ delay: 1.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-12 flex flex-wrap items-center gap-4"
+          >
+            <Button size="lg" className="group shadow-[0_0_45px_-14px_var(--primary)]">
               Launch Project
               <HiArrowNarrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
             </Button>
-            <Button size="lg" variant="outline" className="group">
+            <Button size="lg" variant="outline" className="group shadow-[0_0_45px_-16px_var(--secondary)]">
               <FiPlay className="transition-transform duration-300 group-hover:scale-110" />
               Showreel
             </Button>

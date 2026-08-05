@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useMotionValueEvent,
+  useTransform,
+  useSpring,
+} from "framer-motion";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
-import { cn } from "@/utils/cn";
 import { Button } from "@/components/Button";
 import { Logo } from "@/components/Logo";
 
@@ -18,6 +24,13 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { scrollY } = useScroll();
+
+  // The glass shell fades in on the first scroll, then keeps thinning out so the
+  // bar reads as an ever lighter HUD the deeper you travel.
+  const shellOpacity = useSpring(useTransform(scrollY, [0, 120, 900], [0, 1, 0.42]), {
+    stiffness: 120,
+    damping: 26,
+  });
 
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 24));
 
@@ -42,11 +55,13 @@ export function Navbar() {
           paddingBottom: scrolled ? 10 : 18,
         }}
         transition={{ type: "spring", stiffness: 180, damping: 26 }}
-        className={cn(
-          "mx-auto flex items-center justify-between rounded-2xl px-5 transition-colors duration-500",
-          scrolled ? "glass-panel shadow-glow" : "border border-transparent bg-transparent",
-        )}
+        className="relative mx-auto flex items-center justify-between rounded-2xl border border-transparent px-5"
       >
+        <motion.span
+          aria-hidden
+          style={{ opacity: shellOpacity }}
+          className="glass-panel shadow-glow pointer-events-none absolute inset-0 -z-10 rounded-2xl"
+        />
         <Link to="/" aria-label="NEOGRID home">
           <Logo />
         </Link>
