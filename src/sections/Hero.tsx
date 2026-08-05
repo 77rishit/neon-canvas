@@ -91,12 +91,14 @@ export function Hero() {
   }, []);
 
   return (
-    <section
-      id="home"
-      ref={rootRef}
-      className="relative flex min-h-dvh w-full items-center overflow-hidden"
-    >
+    <section id="home" ref={rootRef} className="relative w-full md:h-[175dvh]">
+      {/* Sticky stage: the hero holds while the page scrolls past it. */}
+      <div
+        data-hero-stage
+        className="relative flex min-h-dvh w-full items-center overflow-hidden md:sticky md:top-0 md:h-dvh md:min-h-0 md:will-change-transform"
+      >
       <AnimatedBackground />
+
 
       <div
         aria-hidden
