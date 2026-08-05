@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useMotionValueEvent,
+  useTransform,
+  useSpring,
+} from "framer-motion";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/Button";
