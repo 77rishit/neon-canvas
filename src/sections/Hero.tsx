@@ -106,7 +106,7 @@ export function Hero() {
         </motion.div>
       </div>
 
-      <ScrollIndicator href="#system" />
+      <ScrollIndicator href="#about" />
     </section>
   );
 }
