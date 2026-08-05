@@ -51,21 +51,45 @@ export function useTextReveal<T extends HTMLElement = HTMLHeadingElement>(
           : { scrollTrigger: { trigger: el, start, once: true } }),
       });
 
+      // Anticipation: the mask compresses a hair before the lines travel.
+      tl.fromTo(
+        el,
+        { scaleY: 0.985, transformOrigin: "50% 100%" },
+        { scaleY: 1, duration: 1.2, ease: "power2.out" },
+        0,
+      );
 
+      // Action: lines slide up from behind their mask, overshooting slightly.
       tl.fromTo(
         targets,
-        { yPercent: 110, rotate: mode === "word" ? 3 : 1.5, opacity: 0 },
         {
-          yPercent: 0,
+          yPercent: 110,
+          rotate: mode === "word" ? 3 : 1.5,
+          opacity: 0,
+        },
+        {
+          yPercent: mode === "word" ? -2 : -1.5,
           rotate: 0,
           opacity: 1,
           duration: 1,
           stagger: mode === "word" ? 0.05 : 0.11,
         },
+        0,
       );
 
-
+      // Follow-through: they settle back onto the baseline a beat later.
+      tl.to(
+        targets,
+        {
+          yPercent: 0,
+          duration: 0.55,
+          ease: "power2.inOut",
+          stagger: mode === "word" ? 0.05 : 0.11,
+        },
+        mode === "word" ? 0.55 : 0.7,
+      );
     }, el);
+
 
     return () => {
       ctx.revert();
