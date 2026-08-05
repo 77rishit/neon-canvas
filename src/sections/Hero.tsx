@@ -16,7 +16,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-screen w-full items-center overflow-hidden"
+      className="relative flex min-h-dvh w-full items-center overflow-hidden"
     >
       <AnimatedBackground />
 

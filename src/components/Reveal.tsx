@@ -1,10 +1,10 @@
-import { type ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { fadeUp, stagger, viewportOnce } from "@/utils/motion";
 import { cn } from "@/utils/cn";
 
 /** Scroll-reveal wrapper: staggers direct children that use <RevealItem>. */
-export function Reveal({
+function RevealBase({
   children,
   className,
   delay = 0.08,
@@ -26,7 +26,7 @@ export function Reveal({
   );
 }
 
-export function RevealItem({
+function RevealItemBase({
   children,
   className,
 }: {
@@ -39,5 +39,9 @@ export function RevealItem({
     </motion.div>
   );
 }
+
+/** Memoized: these wrappers re-render only when their own props change. */
+export const Reveal = memo(RevealBase);
+export const RevealItem = memo(RevealItemBase);
 
 export default Reveal;

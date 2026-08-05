@@ -80,7 +80,7 @@ export function Navbar() {
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="text-primary md:hidden"
+          className="-mr-2 grid min-h-11 min-w-11 place-items-center rounded-md text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
         >
           {open ? <HiX size={26} /> : <HiMenuAlt3 size={26} />}
         </button>
