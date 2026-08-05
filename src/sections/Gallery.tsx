@@ -44,7 +44,10 @@ export function Gallery() {
       title="Last edition, in frames"
       description="Twelve thousand participants, three stages and seventy-two hours of continuous build time. Click any frame to open the lightbox."
     >
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3" data-fx="stagger">
+      <div
+        className="grid auto-rows-[minmax(0,1fr)] grid-flow-dense grid-cols-2 gap-4 [grid-auto-rows:14rem] md:grid-cols-3 md:[grid-auto-rows:16rem]"
+        data-fx="stagger"
+      >
         {GALLERY.map((img, i) => (
           <button
             key={`${img.alt}-${i}`}
@@ -52,9 +55,10 @@ export function Gallery() {
             onClick={() => setIndex(i)}
             aria-label={`Open image: ${img.alt}`}
             className={`group relative overflow-hidden rounded-2xl border border-border/70 outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-              i % 5 === 0 ? "md:row-span-2 md:aspect-3/4" : "aspect-4/3"
+              i === 0 ? "col-span-2 row-span-2" : ""
             }`}
           >
+
             <img
               src={img.src}
               alt={img.alt}
