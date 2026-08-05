@@ -8,7 +8,7 @@ import { Reveal, RevealItem } from "@/components/Reveal";
 import { Button } from "@/components/Button";
 
 const FIELD =
-  "w-full rounded-lg border border-border bg-background/40 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 outline-none transition-colors duration-300 focus:border-primary/60 focus:bg-primary/5";
+  "w-full rounded-lg border border-border bg-background/40 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 outline-none transition-[color,background-color,border-color,box-shadow] duration-300 focus:border-primary/60 focus:bg-primary/5 focus:shadow-[0_0_28px_-8px_var(--primary)] hover:border-primary/30";
 
 export function Contact() {
   const [sent, setSent] = useState(false);
