@@ -1,20 +1,61 @@
-import { useState } from "react";
-import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { FiPlus } from "react-icons/fi";
+import { gsap } from "@/utils/gsap";
 import { Section } from "@/components/Section";
 import { SCHEDULE } from "@/data/fest";
 
-/** Vertical schedule spine with a scroll-tracked fill and expandable milestones. */
+/**
+ * Vertical schedule spine: the neon line draws itself on scrub while each
+ * milestone slides in from the spine, and any card can expand for detail.
+ */
 export function Timeline() {
   const listRef = useRef<HTMLOListElement>(null);
   const [open, setOpen] = useState<string | null>(SCHEDULE[1]?.id ?? null);
 
-  const { scrollYProgress } = useScroll({
-    target: listRef,
-    offset: ["start 75%", "end 60%"],
-  });
-  const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 });
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+
+    const ctx = gsap.context(() => {
+      // Spine fill, scrubbed across the list's travel.
+      gsap.fromTo(
+        "[data-spine]",
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: list,
+            start: "top 75%",
+            end: "bottom 60%",
+            scrub: 0.4,
+            invalidateOnRefresh: true,
+          },
+        },
+      );
+
+      // Milestones swing in off the spine, with their nodes popping after.
+      const items = gsap.utils.toArray<HTMLElement>("[data-milestone]", list);
+      items.forEach((item) => {
+        gsap
+          .timeline({ scrollTrigger: { trigger: item, start: "top 88%", once: true } })
+          .fromTo(
+            item,
+            { opacity: 0, x: 60, transformOrigin: "0% 50%", rotate: 1.5 },
+            { opacity: 1, x: 0, rotate: 0, duration: 0.8, ease: "expo.out" },
+          )
+          .fromTo(
+            item.querySelector("[data-node]"),
+            { scale: 0 },
+            { scale: 1, duration: 0.5, ease: "back.out(2.4)" },
+            "-=0.45",
+          );
+      });
+    }, list);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <Section
@@ -25,26 +66,20 @@ export function Timeline() {
     >
       <ol ref={listRef} className="relative ml-3 space-y-5 pl-8 sm:ml-6 sm:pl-12">
         <span aria-hidden className="absolute left-0 top-2 h-full w-px bg-border" />
-        <motion.span
+        <span
+          data-spine
           aria-hidden
-          style={{ scaleY }}
-          className="absolute left-0 top-2 h-full w-px origin-top bg-[image:var(--gradient-neon)] shadow-[0_0_12px_var(--primary)]"
+          className="absolute left-0 top-2 h-full w-px origin-top scale-y-0 bg-[image:var(--gradient-neon)] shadow-[0_0_12px_var(--primary)]"
         />
 
-        {SCHEDULE.map((item, i) => {
+        {SCHEDULE.map((item) => {
           const expanded = open === item.id;
           return (
-            <motion.li
-              key={item.id}
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="relative"
-            >
+            <li key={item.id} data-milestone className="relative">
               <span
+                data-node
                 aria-hidden
-                className={`absolute -left-8 top-6 h-3 w-3 -translate-x-1/2 rounded-full border transition-all duration-300 sm:-left-12 ${
+                className={`absolute -left-8 top-6 h-3 w-3 -translate-x-1/2 rounded-full border transition-colors duration-300 sm:-left-12 ${
                   expanded
                     ? "border-primary bg-primary shadow-[0_0_16px_var(--primary)]"
                     : "border-primary/50 bg-background"
@@ -83,12 +118,14 @@ export function Timeline() {
                       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                       className="overflow-hidden text-sm leading-relaxed text-muted-foreground"
                     >
-                      <span className="mt-4 block border-t border-border/60 pt-4">{item.detail}</span>
+                      <span className="mt-4 block border-t border-border/60 pt-4">
+                        {item.detail}
+                      </span>
                     </motion.p>
                   )}
                 </AnimatePresence>
               </button>
-            </motion.li>
+            </li>
           );
         })}
       </ol>

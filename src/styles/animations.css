@@ -4,7 +4,17 @@
   background-image: var(--gradient-neon);
   background-clip: text;
   color: transparent;
+
+  /* Split-text reveals wrap each line in nested block spans, which stops
+     Chromium from painting the parent's clipped gradient. Re-apply the clip
+     on every generated line so masked headings stay visible. */
+  & .split-line-inner {
+    background-image: var(--gradient-neon);
+    background-clip: text;
+    color: transparent;
+  }
 }
+
 
 @utility glow-primary {
   box-shadow: var(--shadow-glow);

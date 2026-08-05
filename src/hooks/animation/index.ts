@@ -1,0 +1,11 @@
+/** Reusable GSAP-powered animation hooks. */
+export { useTextReveal } from "./useTextReveal";
+export { useTilt } from "./useTilt";
+export { useFloat } from "./useFloat";
+export { useSpotlight } from "./useSpotlight";
+export { useCountUp } from "./useCountUp";
+export { useHorizontalScrub } from "./useHorizontalScrub";
+export { usePinnedScrub } from "./usePinnedScrub";
+export { useParallax } from "./useParallax";
+export { useMagnetic } from "../useMagnetic";
+export { useScrollFx } from "../useScrollFx";

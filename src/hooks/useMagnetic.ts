@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
+import { gsap } from "@/utils/gsap";
 
 /**
- * Magnetic hover: the element drifts toward the pointer and springs back.
+ * Magnetic hover: the element drifts toward the pointer and eases back on exit.
+ * Driven by gsap.quickTo (single interpolated transform, no rAF loop).
  * Disabled for coarse pointers and reduced-motion users.
  */
 export function useMagnetic<T extends HTMLElement = HTMLButtonElement>(strength = 0.35) {
@@ -10,41 +12,28 @@ export function useMagnetic<T extends HTMLElement = HTMLButtonElement>(strength 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(pointer: coarse), (prefers-reduced-motion: reduce)").matches) return;
 
-    let raf = 0;
-    let tx = 0;
-    let ty = 0;
-    let cx = 0;
-    let cy = 0;
-
-    const loop = () => {
-      cx += (tx - cx) * 0.16;
-      cy += (ty - cy) * 0.16;
-      el.style.transform = `translate3d(${cx.toFixed(2)}px, ${cy.toFixed(2)}px, 0)`;
-      raf = requestAnimationFrame(loop);
-    };
+    const xTo = gsap.quickTo(el, "x", { duration: 0.55, ease: "power3.out" });
+    const yTo = gsap.quickTo(el, "y", { duration: 0.55, ease: "power3.out" });
 
     const onMove = (e: PointerEvent) => {
       const r = el.getBoundingClientRect();
-      tx = (e.clientX - (r.left + r.width / 2)) * strength;
-      ty = (e.clientY - (r.top + r.height / 2)) * strength;
+      xTo((e.clientX - (r.left + r.width / 2)) * strength);
+      yTo((e.clientY - (r.top + r.height / 2)) * strength);
     };
     const onLeave = () => {
-      tx = 0;
-      ty = 0;
+      xTo(0);
+      yTo(0);
     };
 
     el.addEventListener("pointermove", onMove);
     el.addEventListener("pointerleave", onLeave);
-    raf = requestAnimationFrame(loop);
 
     return () => {
       el.removeEventListener("pointermove", onMove);
       el.removeEventListener("pointerleave", onLeave);
-      cancelAnimationFrame(raf);
-      el.style.transform = "";
+      gsap.killTweensOf(el);
     };
   }, [strength]);
 

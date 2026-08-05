@@ -1,13 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useMotionValueEvent,
-  useTransform,
-  useSpring,
-} from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
+import { gsap, ScrollTrigger } from "@/utils/gsap";
 import { Button } from "@/components/Button";
 import { Logo } from "@/components/Logo";
 import { useActiveSection } from "@/hooks/useActiveSection";
@@ -28,19 +22,36 @@ export const NAV_LINKS = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const { scrollY } = useScroll();
+  const shellRef = useRef<HTMLSpanElement>(null);
 
   const ids = useMemo(() => NAV_LINKS.map((l) => l.id), []);
   const active = useActiveSection(ids);
 
   // The glass shell fades in on the first scroll, then thins out again so the
-  // bar reads as an ever lighter HUD the deeper you travel.
-  const shellOpacity = useSpring(useTransform(scrollY, [0, 120, 1400], [0, 1, 0.5]), {
-    stiffness: 120,
-    damping: 26,
-  });
+  // bar reads as an ever lighter HUD the deeper you travel. Scrubbed by GSAP.
+  useEffect(() => {
+    const shell = shellRef.current;
+    if (!shell) return;
 
-  useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 24));
+    const ctx = gsap.context(() => {
+      gsap.set(shell, { opacity: 0 });
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: document.documentElement,
+            start: "top top",
+            end: "1400 top",
+            scrub: 0.5,
+            onUpdate: (self) => setScrolled(self.scroll() > 24),
+          },
+        })
+        .to(shell, { opacity: 1, ease: "none", duration: 0.09 })
+        .to(shell, { opacity: 0.5, ease: "none", duration: 0.91 });
+    });
+
+    ScrollTrigger.refresh();
+    return () => ctx.revert();
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -72,11 +83,12 @@ export function Navbar() {
         transition={{ type: "spring", stiffness: 180, damping: 26 }}
         className="relative mx-auto flex items-center justify-between gap-4 rounded-2xl border border-transparent px-5"
       >
-        <motion.span
+        <span
+          ref={shellRef}
           aria-hidden
-          style={{ opacity: shellOpacity }}
-          className="glass-panel shadow-glow pointer-events-none absolute inset-0 -z-10 rounded-2xl"
+          className="glass-panel shadow-glow pointer-events-none absolute inset-0 -z-10 rounded-2xl opacity-0"
         />
+
         <button
           type="button"
           onClick={() => go("home")}

@@ -18,45 +18,50 @@ import { Contact } from "@/sections/Contact";
  * Techfest landing page composition.
  *
  * Sections are imported statically so the document server-renders in one pass
- * (SEO + no hydration flash). The heavy WebGL hero is the one lazy boundary.
- * Each wrapper assigns a unique GSAP entrance signature (see useScrollFx).
+ * (SEO + no hydration flash); the heavy WebGL hero is the one lazy boundary.
+ * Each wrapper declares a UNIQUE GSAP entrance signature — see useScrollFx —
+ * so no two sections share the same choreography. Statistics owns the page's
+ * single pinned beat and drives its own timeline.
  */
 export function Home() {
   return (
     <RegistrationProvider>
       <MainLayout>
         <Hero />
-        <div data-fx="fade-scale">
+        <div data-fx="blur-focus">
           <About />
         </div>
-        <div data-fx="left">
+        <div data-fx="slide-skew-left">
           <Events />
         </div>
-        <Registration />
-        <div data-fx="right">
+        <div data-fx="curtain">
+          <Registration />
+        </div>
+        <div data-fx="slide-skew-right">
           <Competitions />
         </div>
-        <div data-fx="clip">
+        <div data-fx="wipe-right">
           <Sponsors />
         </div>
-        <Gallery />
-        <div data-fx="rotate">
-          <Statistics />
+        <div data-fx="mask-up">
+          <Gallery />
         </div>
-        <div data-fx="left">
+        <Statistics />
+        <div data-fx="telescope">
           <Timeline />
         </div>
-        <div data-fx="fade-scale">
+        <div data-fx="flip">
           <Team />
         </div>
-        <div data-fx="right">
+        <div data-fx="zoom-out">
           <Testimonials />
         </div>
-        <div data-fx="clip">
+        <div data-fx="wipe-down">
           <FAQ />
         </div>
-        <Contact />
-
+        <div data-fx="rise-rotate">
+          <Contact />
+        </div>
       </MainLayout>
     </RegistrationProvider>
   );
