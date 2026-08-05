@@ -3,6 +3,7 @@ import { HiArrowNarrowRight } from "react-icons/hi";
 import { FiPlay } from "react-icons/fi";
 import { Button } from "@/components/Button";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { LazyHeroScene } from "@/components/three/LazyHeroScene";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { useTypingText } from "@/hooks/useTypingText";
 import { fadeUp, stagger } from "@/utils/motion";
@@ -19,8 +20,21 @@ export function Hero() {
     >
       <AnimatedBackground />
 
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 opacity-60 md:left-auto md:right-0 md:w-[58%] md:opacity-95"
+        style={{
+          maskImage:
+            "radial-gradient(ellipse 72% 68% at 62% 48%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 88%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 72% 68% at 62% 48%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 88%)",
+        }}
+      >
+        <LazyHeroScene className="absolute inset-0" />
+      </div>
+
       <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pt-32 pb-28 md:pt-36">
-        <motion.div variants={stagger(0.12)} initial="hidden" animate="show" className="max-w-4xl">
+        <motion.div variants={stagger(0.12)} initial="hidden" animate="show" className="max-w-4xl md:max-w-xl lg:max-w-2xl">
           <motion.div
             variants={fadeUp}
             className="inline-flex items-center gap-3 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5"
