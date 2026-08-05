@@ -39,7 +39,7 @@ export function Hero() {
         <LazyHeroScene className="absolute inset-0" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pt-32 pb-28 md:pt-36">
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pt-32 pb-28 md:pt-36" data-depth="front">
         <motion.div variants={stagger(0.12)} initial="hidden" animate="show" className="max-w-4xl md:max-w-xl lg:max-w-2xl">
           <motion.div
             variants={fadeUp}
