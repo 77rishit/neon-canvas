@@ -240,3 +240,63 @@
     animation: none !important;
   }
 }
+
+/* Moving light beams — slow diagonal sweeps behind the page content */
+@keyframes beam-sweep {
+  0% {
+    transform: translate3d(-40vw, -10vh, 0) rotate(18deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.55;
+  }
+  88% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate3d(120vw, 10vh, 0) rotate(18deg);
+    opacity: 0;
+  }
+}
+
+.light-beam {
+  position: absolute;
+  top: -20vh;
+  height: 160vh;
+  width: 14vw;
+  filter: blur(46px);
+  will-change: transform, opacity;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--primary) 16%, transparent),
+    transparent
+  );
+  animation: beam-sweep 26s linear infinite;
+}
+
+.light-beam--b {
+  width: 9vw;
+  animation-duration: 34s;
+  animation-delay: -11s;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--secondary) 18%, transparent),
+    transparent
+  );
+}
+
+.light-beam--c {
+  width: 20vw;
+  animation-duration: 44s;
+  animation-delay: -22s;
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .light-beam {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
