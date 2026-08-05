@@ -1,7 +1,8 @@
 import { motion, type HTMLMotionProps } from "framer-motion";
 import { cn } from "@/utils/cn";
 
-export interface GlassCardProps extends HTMLMotionProps<"div"> {
+export interface GlassCardProps extends Omit<HTMLMotionProps<"div">, "children"> {
+  children?: React.ReactNode;
   /** Adds a violet neon edge instead of the default cyan. */
   tone?: "primary" | "secondary";
   /** Disables the hover lift (for static panels). */
@@ -21,7 +22,7 @@ export function GlassCard({
 }: GlassCardProps) {
   return (
     <motion.div
-      whileHover={still ? undefined : { y: -6 }}
+      {...(still ? {} : { whileHover: { y: -6 } })}
       transition={{ type: "spring", stiffness: 260, damping: 22 }}
       className={cn(
         "group/card glass-panel relative overflow-hidden rounded-2xl p-6 transition-colors duration-300",
