@@ -1,86 +1,95 @@
-import { motion } from "framer-motion";
-import { FiTarget, FiZap, FiLayers } from "react-icons/fi";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { FiCpu, FiGlobe, FiUsers, FiChevronDown } from "react-icons/fi";
 import { Section } from "@/components/Section";
 import { GlassCard } from "@/components/GlassCard";
 import { ParallaxBackdrop } from "@/components/ParallaxBackdrop";
-import { Reveal, RevealItem } from "@/components/Reveal";
+import { FEST } from "@/data/fest";
 
 const PILLARS = [
   {
-    icon: FiTarget,
-    title: "Precision first",
-    body: "Every pixel is a decision. We design with grids, ratios and intent — never decoration for its own sake.",
+    icon: FiCpu,
+    title: "Build in public",
+    summary: "Every competitive track ends with a live demo in front of judges and peers.",
+    detail:
+      "We run the fest like a product studio: sealed briefs, timed sprints, mentor rotations and a public demo at the end. Judges score on shipped functionality first and polish second, so the fastest learners always place well.",
+    tone: "primary" as const,
   },
   {
-    icon: FiZap,
-    title: "Realtime craft",
-    body: "Shaders, physics and motion systems built to run at 60fps on the devices people actually use.",
+    icon: FiUsers,
+    title: "One campus, every discipline",
+    summary: "Coders, designers, hardware tinkerers and casters share the same three days.",
+    detail:
+      "240 colleges send teams across nine states. Cross-disciplinary teams get priority for mentor slots because the strongest submissions historically pair a systems engineer with a designer.",
+    tone: "secondary" as const,
   },
   {
-    icon: FiLayers,
-    title: "Systems, not pages",
-    body: "Tokens, primitives and motion rules that scale from a landing page to an entire product surface.",
+    icon: FiGlobe,
+    title: "Industry in the room",
+    summary: "Partner engineers mentor, judge and recruit throughout the weekend.",
+    detail:
+      "Our title and platinum partners staff a recruiter lounge for all three days. Last edition, 180 participants left with internship or full-time offers directly from fest interviews.",
+    tone: "primary" as const,
   },
 ];
 
 export function About() {
+  const [expanded, setExpanded] = useState<string | null>(null);
+
   return (
     <Section
       id="about"
-      eyebrow="About"
-      title="A studio wired for the next interface"
-      description="NEO//GRID is a small, senior team building realtime web experiences for brands that refuse to look like everyone else."
-      className="overflow-hidden"
+      eyebrow="About the fest"
+      title="Where the country's builders collide"
+      description={`${FEST.name} ${FEST.edition} runs ${FEST.dates} at the ${FEST.venue}. Three days, forty-eight tracks and a single rule: ship something real.`}
+      className="relative"
     >
-      <ParallaxBackdrop align="right" />
+      <ParallaxBackdrop />
 
-      <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-        <Reveal className="space-y-5">
-          <RevealItem>
-            <p className="text-lg leading-relaxed text-foreground/80">
-              We operate at the intersection of engineering and art direction — prototyping in
-              code, iterating in the browser, and shipping interfaces that feel like hardware.
-            </p>
-          </RevealItem>
-          <RevealItem>
-            <p className="leading-relaxed text-muted-foreground">
-              Founded in 2019, the studio has delivered realtime product launches, immersive
-              brand worlds and design systems for teams across Berlin, Tokyo and San Francisco.
-              Every engagement is led by the people doing the work — no handoffs, no layers.
-            </p>
-          </RevealItem>
-          <RevealItem className="flex flex-wrap gap-3 pt-2">
-            {["Realtime 3D", "Motion systems", "Design engineering", "Brand worlds"].map((t) => (
-              <span
-                key={t}
-                className="rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 font-display text-[0.6rem] uppercase tracking-[0.28em] text-primary transition-colors hover:border-primary/60 hover:bg-primary/10"
-              >
-                {t}
+      <div className="grid gap-6 md:grid-cols-3" data-fx="stagger">
+        {PILLARS.map((pillar, i) => {
+          const open = expanded === pillar.title;
+          return (
+            <GlassCard key={pillar.title} tone={pillar.tone} floatIndex={i} className="flex flex-col">
+              <span className="grid h-12 w-12 place-items-center rounded-xl border border-primary/25 bg-primary/5 text-primary">
+                <pillar.icon size={20} />
               </span>
-            ))}
-          </RevealItem>
-        </Reveal>
+              <h3 className="mt-6 font-display text-lg uppercase tracking-[0.12em] text-foreground">
+                {pillar.title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{pillar.summary}</p>
 
-        <Reveal className="grid gap-4" delay={0.12}>
-          {PILLARS.map(({ icon: Icon, title, body }) => (
-            <RevealItem key={title}>
-              <GlassCard className="flex gap-4">
-                <motion.span
-                  whileHover={{ rotate: 8, scale: 1.08 }}
-                  className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-primary/30 bg-primary/10 text-primary"
-                >
-                  <Icon size={20} />
+              <AnimatePresence initial={false}>
+                {open && (
+                  <motion.div
+                    key="detail"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <p className="mt-4 border-t border-border/60 pt-4 text-sm leading-relaxed text-muted-foreground">
+                      {pillar.detail}
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <button
+                type="button"
+                aria-expanded={open}
+                onClick={() => setExpanded(open ? null : pillar.title)}
+                className="mt-6 inline-flex items-center gap-2 self-start font-display text-[0.62rem] uppercase tracking-[0.28em] text-primary outline-none transition-colors hover:text-secondary focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                {open ? "Read less" : "Read more"}
+                <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.3 }}>
+                  <FiChevronDown />
                 </motion.span>
-                <div className="min-w-0">
-                  <h3 className="font-display text-base font-semibold tracking-wide text-foreground">
-                    {title}
-                  </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{body}</p>
-                </div>
-              </GlassCard>
-            </RevealItem>
-          ))}
-        </Reveal>
+              </button>
+            </GlassCard>
+          );
+        })}
       </div>
     </Section>
   );
