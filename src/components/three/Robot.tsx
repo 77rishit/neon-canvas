@@ -40,7 +40,7 @@ export function Robot() {
 
   return (
     <Float speed={1.4} rotationIntensity={0.15} floatIntensity={0.5}>
-      <group ref={group} scale={0.66} position={[0, -0.1, 0]}>
+      <group ref={group} scale={1.05} position={[0, -0.1, 0]}>
         {/* Head */}
         <group ref={head} position={[0, 1.15, 0]}>
           <mesh castShadow receiveShadow>

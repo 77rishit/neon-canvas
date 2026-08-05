@@ -46,7 +46,7 @@ export function HeroScene({ className }: { className?: string }) {
         shadows="soft"
         dpr={degraded ? [1, 1] : [1, 1.75]}
         gl={{ antialias: !degraded, alpha: true, powerPreference: "high-performance" }}
-        camera={{ position: [0, 0.35, 13], fov: 38 }}
+        camera={{ position: [0, 0.35, 11], fov: 38 }}
       >
         <PerformanceMonitor onDecline={() => setDegraded(true)} />
 
