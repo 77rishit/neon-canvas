@@ -63,8 +63,10 @@ export function Projects() {
               <motion.div layout exit={{ opacity: 0, scale: 0.96 }}>
                 <GlassCard className="h-full overflow-hidden p-0">
                   <div
+                    data-fx="mask"
                     className={`relative h-44 overflow-hidden bg-gradient-to-br ${p.tint}`}
                   >
+
                     <div className="grid-lines absolute inset-0 opacity-70 transition-transform duration-700 group-hover/card:scale-110" />
                     <span className="absolute right-4 top-4 rounded-full border border-primary/30 bg-background/50 px-3 py-1 font-display text-[0.55rem] uppercase tracking-[0.26em] text-primary">
                       {p.tag}
