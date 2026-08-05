@@ -1,13 +1,16 @@
 import { useEffect, type ReactNode } from "react";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import { CustomCursor } from "@/components/CustomCursor";
 import { MouseGlow } from "@/components/MouseGlow";
 import { NoiseOverlay } from "@/components/NoiseOverlay";
 import { ParticleField } from "@/components/ParticleField";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { PageTransition } from "@/components/PageTransition";
+import { ScrollProgress } from "@/components/ScrollProgress";
 import { useLenis } from "@/hooks/useLenis";
 import { useScrollFx } from "@/hooks/useScrollFx";
+import { useSmoothAnchors } from "@/hooks/useSmoothAnchors";
 
 /**
  * App shell: smooth scroll, custom cursor, pointer glow and navigation.
@@ -15,6 +18,7 @@ import { useScrollFx } from "@/hooks/useScrollFx";
 export function MainLayout({ children }: { children: ReactNode }) {
   useLenis();
   useScrollFx();
+  useSmoothAnchors();
 
   useEffect(() => {
     const root = document.documentElement;
@@ -32,6 +36,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
         Skip to content
       </a>
       <LoadingScreen />
+      <ScrollProgress />
       <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <ParticleField />
         <span className="absolute -left-32 top-[12%] h-[26rem] w-[26rem] rounded-full bg-primary/10 blur-[120px] animate-blob" />
@@ -45,6 +50,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
       <main className="relative z-10">
         <PageTransition>{children}</PageTransition>
       </main>
+      <Footer />
     </div>
   );
 }

@@ -17,6 +17,8 @@ export function useLenis() {
 touchMultiplier: 1.6,
     });
     lenisRef.current = lenis;
+    // Exposed so global helpers (anchor scrolling) can reuse the instance.
+    window.__lenis = lenis;
 
     lenis.on("scroll", ScrollTrigger.update);
 
@@ -28,6 +30,7 @@ touchMultiplier: 1.6,
       gsap.ticker.remove(tick);
       lenis.destroy();
       lenisRef.current = null;
+      delete window.__lenis;
     };
   }, []);
 
