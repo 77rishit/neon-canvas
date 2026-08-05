@@ -50,14 +50,18 @@ export function Sponsors() {
           aria-label="Sponsor logos"
         >
           {SPONSORS.map((sponsor, i) => (
-            <motion.article
+            <motion.a
               key={sponsor.name}
+              href={sponsor.url}
+              target="_blank"
+              rel="noreferrer noopener sponsored"
+              aria-label={`${sponsor.name} — ${sponsor.tier} (opens in a new tab)`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.5, delay: (i % 4) * 0.07 }}
               whileHover={{ y: -8 }}
-              className="group glass-panel relative flex min-w-[15rem] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-2xl px-8 py-10 transition-colors duration-300 hover:border-primary/45 hover:shadow-[0_0_40px_-14px_var(--primary)]"
+              className="group glass-panel relative flex min-w-[15rem] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-2xl px-8 py-10 outline-none transition-colors duration-300 hover:border-primary/45 hover:shadow-[0_0_40px_-14px_var(--primary)] focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span
                 aria-hidden
@@ -71,8 +75,12 @@ export function Sponsors() {
               <p className="font-display text-[0.52rem] uppercase tracking-[0.3em] text-muted-foreground">
                 {sponsor.tier}
               </p>
-            </motion.article>
+              <span className="pointer-events-none absolute bottom-3 font-display text-[0.5rem] uppercase tracking-[0.28em] text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                Visit site ↗
+              </span>
+            </motion.a>
           ))}
+
         </div>
 
         <div className="mt-6 flex items-center gap-3">

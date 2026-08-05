@@ -43,13 +43,20 @@ export function Home() {
         <div data-fx="rotate">
           <Statistics />
         </div>
-        <Timeline />
+        <div data-fx="left">
+          <Timeline />
+        </div>
         <div data-fx="fade-scale">
           <Team />
         </div>
-        <Testimonials />
-        <FAQ />
+        <div data-fx="right">
+          <Testimonials />
+        </div>
+        <div data-fx="clip">
+          <FAQ />
+        </div>
         <Contact />
+
       </MainLayout>
     </RegistrationProvider>
   );
