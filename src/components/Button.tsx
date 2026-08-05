@@ -29,10 +29,22 @@ export interface ButtonProps extends HTMLMotionProps<"button"> {
   size?: Size;
   /** Pointer-follow magnetic drift. Default on. */
   magnetic?: boolean;
+  /** Shows an inline spinner and blocks interaction. */
+  loading?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant = "primary", size = "md", magnetic = true, onPointerDown, children, ...props },
+  {
+    className,
+    variant = "primary",
+    size = "md",
+    magnetic = true,
+    loading = false,
+    disabled,
+    onPointerDown,
+    children,
+    ...props
+  },
   ref,
 ) {
   const magneticRef = useMagnetic<HTMLButtonElement>(0.3);
@@ -58,8 +70,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     <motion.button
       ref={magnetic ? magneticRef : ref}
       onPointerDown={handlePointerDown}
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
+      whileHover={disabled || loading ? undefined : { scale: 1.03 }}
+      whileTap={disabled || loading ? undefined : { scale: 0.97 }}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
       className={cn(
         "relative isolate overflow-hidden inline-flex items-center justify-center gap-2 rounded-md font-display font-semibold uppercase tracking-[0.14em]",
         "transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
@@ -82,7 +96,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
           }}
         />
       ))}
-      <span className="relative z-10 inline-flex items-center gap-2">{children as React.ReactNode}</span>
+      <span className="relative z-10 inline-flex items-center gap-2">
+        {loading && (
+          <span
+            aria-hidden
+            className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent"
+          />
+        )}
+        {children as React.ReactNode}
+      </span>
     </motion.button>
   );
 });
