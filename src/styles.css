@@ -109,6 +109,18 @@
   h4 {
     font-family: var(--font-display);
     letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One consistent, visible keyboard focus treatment sitewide. */
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 
   ::selection {
