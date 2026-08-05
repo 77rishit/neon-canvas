@@ -23,7 +23,11 @@ export const Section = forwardRef<HTMLElement, SectionProps>(function Section(
     <section
       id={id}
       ref={ref}
-      className={cn("relative w-full", !flush && "py-24 md:py-32", className)}
+      className={cn(
+        "relative w-full scroll-mt-28",
+        !flush && "py-20 md:py-28 lg:py-32",
+        className,
+      )}
     >
       <div className={cn("mx-auto w-full max-w-6xl px-6", containerClassName)}>
         {(eyebrow || title || description) && (
@@ -32,18 +36,22 @@ export const Section = forwardRef<HTMLElement, SectionProps>(function Section(
             initial="hidden"
             whileInView="show"
             viewport={viewportOnce}
-            className="mb-12 max-w-2xl"
+            className="mb-10 max-w-2xl md:mb-14"
           >
             {eyebrow && (
-              <span className="font-display text-xs uppercase tracking-[0.35em] text-primary">
+              <span className="font-display text-[0.6rem] uppercase tracking-[0.38em] text-primary md:text-xs">
                 {eyebrow}
               </span>
             )}
             {title && (
-              <h2 className="mt-4 text-3xl font-bold md:text-5xl text-gradient-neon">{title}</h2>
+              <h2 className="mt-4 text-balance text-[clamp(2rem,4.6vw,3.5rem)] font-bold leading-[1.05] text-gradient-neon">
+                {title}
+              </h2>
             )}
             {description && (
-              <p className="mt-4 text-base leading-relaxed text-muted-foreground">{description}</p>
+              <p className="mt-5 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
+                {description}
+              </p>
             )}
           </motion.header>
         )}
