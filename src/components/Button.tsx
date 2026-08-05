@@ -1,6 +1,7 @@
-import { forwardRef } from "react";
+import { forwardRef, useCallback, useRef, useState } from "react";
 import { motion, type HTMLMotionProps } from "framer-motion";
 import { cn } from "@/utils/cn";
+import { useMagnetic } from "@/hooks/useMagnetic";
 
 type Variant = "primary" | "secondary" | "ghost" | "outline";
 type Size = "sm" | "md" | "lg";
@@ -21,22 +22,46 @@ const sizes: Record<Size, string> = {
   lg: "h-13 px-8 text-base",
 };
 
+type Ripple = { id: number; x: number; y: number; size: number };
+
 export interface ButtonProps extends HTMLMotionProps<"button"> {
   variant?: Variant;
   size?: Size;
+  /** Pointer-follow magnetic drift. Default on. */
+  magnetic?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant = "primary", size = "md", ...props },
+  { className, variant = "primary", size = "md", magnetic = true, onPointerDown, ...props },
   ref,
 ) {
+  const magneticRef = useMagnetic<HTMLButtonElement>(0.3);
+  const [ripples, setRipples] = useState<Ripple[]>([]);
+  const idRef = useRef(0);
+
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLButtonElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height) * 2;
+      const id = ++idRef.current;
+      setRipples((r) => [
+        ...r,
+        { id, x: e.clientX - rect.left, y: e.clientY - rect.top, size },
+      ]);
+      setTimeout(() => setRipples((r) => r.filter((it) => it.id !== id)), 650);
+      onPointerDown?.(e);
+    },
+    [onPointerDown],
+  );
+
   return (
     <motion.button
-      ref={ref}
+      ref={magnetic ? (ref ?? magneticRef) === ref ? magneticRef : magneticRef : ref}
+      onPointerDown={handlePointerDown}
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-md font-display font-semibold uppercase tracking-[0.14em]",
+        "relative isolate overflow-hidden inline-flex items-center justify-center gap-2 rounded-md font-display font-semibold uppercase tracking-[0.14em]",
         "transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         "disabled:pointer-events-none disabled:opacity-50",
         variants[variant],
@@ -44,7 +69,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         className,
       )}
       {...props}
-    />
+    >
+      {ripples.map((r) => (
+        <span
+          key={r.id}
+          className="pointer-events-none absolute -z-0 rounded-full bg-foreground/30 animate-ripple"
+          style={{
+            left: r.x - r.size / 2,
+            top: r.y - r.size / 2,
+            width: r.size,
+            height: r.size,
+          }}
+        />
+      ))}
+      <span className="relative z-10 inline-flex items-center gap-2">{props.children}</span>
+    </motion.button>
   );
 });
 
