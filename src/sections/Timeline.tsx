@@ -1,77 +1,97 @@
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
+import { useRef } from "react";
+import { FiPlus } from "react-icons/fi";
 import { Section } from "@/components/Section";
-import { GlassCard } from "@/components/GlassCard";
-import { ParallaxBackdrop } from "@/components/ParallaxBackdrop";
-import { Reveal, RevealItem } from "@/components/Reveal";
+import { SCHEDULE } from "@/data/fest";
 
-const STEPS = [
-  { year: "2019", title: "Signal", body: "Studio founded by three engineers who kept getting hired to fix design systems." },
-  { year: "2021", title: "Realtime", body: "First WebGL configurator ships — 42% lift in product page conversion." },
-  { year: "2023", title: "Scale", body: "Motion + token system adopted across a 60-person product org." },
-  { year: "2024", title: "Awards", body: "Three Awwwards Site of the Day and an FWA for the Kinetic launch." },
-  { year: "2026", title: "NEO//GRID v2", body: "Edge-rendered realtime stack, open-sourced primitives, global team of nine." },
-];
-
+/** Vertical schedule spine with a scroll-tracked fill and expandable milestones. */
 export function Timeline() {
+  const listRef = useRef<HTMLOListElement>(null);
+  const [open, setOpen] = useState<string | null>(SCHEDULE[1]?.id ?? null);
+
+  const { scrollYProgress } = useScroll({
+    target: listRef,
+    offset: ["start 75%", "end 60%"],
+  });
+  const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 });
+
   return (
     <Section
       id="timeline"
-      eyebrow="Timeline"
-      title="Signal over time"
-      description="A short history of the studio, from three engineers to a realtime practice."
-      className="overflow-hidden"
+      eyebrow="Schedule"
+      title="Three days, minute by minute"
+      description="Click any milestone to expand the detail. Full session-level timings drop in the fest app one week before doors."
     >
-      <ParallaxBackdrop align="left" />
-
-      <div className="relative">
-        {/* spine — a dim rail with a neon fill that tracks the scroll position */}
-        <span
-          aria-hidden
-          className="absolute left-[15px] top-2 h-full w-px bg-border/70 md:left-1/2"
-        />
+      <ol ref={listRef} className="relative ml-3 space-y-5 pl-8 sm:ml-6 sm:pl-12">
+        <span aria-hidden className="absolute left-0 top-2 h-full w-px bg-border" />
         <motion.span
           aria-hidden
-          initial={{ scaleY: 0 }}
-          whileInView={{ scaleY: 1 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute left-[15px] top-2 h-full w-px origin-top bg-gradient-to-b from-primary via-secondary to-transparent shadow-[0_0_14px_var(--primary)] md:left-1/2"
+          style={{ scaleY }}
+          className="absolute left-0 top-2 h-full w-px origin-top bg-[image:var(--gradient-neon)] shadow-[0_0_12px_var(--primary)]"
         />
 
-        <Reveal className="space-y-8" delay={0.14}>
-          {STEPS.map((s, i) => (
-            <RevealItem key={s.year}>
-              <div
-                className={`relative grid grid-cols-[32px_minmax(0,1fr)] gap-5 md:grid-cols-2 md:gap-12 ${
-                  i % 2 ? "md:[&>*:first-child]:order-2" : ""
+        {SCHEDULE.map((item, i) => {
+          const expanded = open === item.id;
+          return (
+            <motion.li
+              key={item.id}
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              className="relative"
+            >
+              <span
+                aria-hidden
+                className={`absolute -left-8 top-6 h-3 w-3 -translate-x-1/2 rounded-full border transition-all duration-300 sm:-left-12 ${
+                  expanded
+                    ? "border-primary bg-primary shadow-[0_0_16px_var(--primary)]"
+                    : "border-primary/50 bg-background"
                 }`}
+              />
+              <button
+                type="button"
+                aria-expanded={expanded}
+                onClick={() => setOpen(expanded ? null : item.id)}
+                className="glass-panel block w-full rounded-2xl p-6 text-left outline-none transition-colors duration-300 hover:border-primary/40 focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <div className={`md:contents ${i % 2 ? "" : ""}`}>
-                  <span className="relative z-10 mt-4 grid h-8 w-8 place-items-center rounded-full border border-primary/40 bg-background md:absolute md:left-1/2 md:-translate-x-1/2">
-                    <motion.span
-                      className="h-2 w-2 rounded-full bg-primary"
-                      animate={{ scale: [1, 1.5, 1], opacity: [1, 0.4, 1] }}
-                      transition={{ duration: 2.4, repeat: Infinity, delay: i * 0.3 }}
-                    />
-                  </span>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <span className="font-display text-[0.55rem] uppercase tracking-[0.3em] text-primary">
+                      {item.day} — {item.date}
+                    </span>
+                    <h3 className="mt-2 font-display text-lg uppercase tracking-[0.06em] text-foreground">
+                      {item.title}
+                    </h3>
+                  </div>
+                  <motion.span
+                    animate={{ rotate: expanded ? 45 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="mt-1 shrink-0 text-secondary"
+                  >
+                    <FiPlus size={20} />
+                  </motion.span>
                 </div>
 
-                <div className={i % 2 ? "md:col-start-2" : "md:col-start-1 md:text-right"}>
-                  <GlassCard tone={i % 2 ? "secondary" : "primary"}>
-                    <span className="font-display text-2xl font-bold text-gradient-neon">
-                      {s.year}
-                    </span>
-                    <h3 className="mt-2 font-display text-lg font-semibold tracking-wide text-foreground">
-                      {s.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
-                  </GlassCard>
-                </div>
-              </div>
-            </RevealItem>
-          ))}
-        </Reveal>
-      </div>
+                <AnimatePresence initial={false}>
+                  {expanded && (
+                    <motion.p
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                      className="overflow-hidden text-sm leading-relaxed text-muted-foreground"
+                    >
+                      <span className="mt-4 block border-t border-border/60 pt-4">{item.detail}</span>
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </button>
+            </motion.li>
+          );
+        })}
+      </ol>
     </Section>
   );
 }
