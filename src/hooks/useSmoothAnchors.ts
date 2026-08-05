@@ -1,9 +1,6 @@
 import { useEffect } from "react";
 import type Lenis from "lenis";
 
-/** Height of the fixed navbar; anchors stop just below it. */
-const NAV_OFFSET = 96;
-
 declare global {
   interface Window {
     __lenis?: Lenis;
@@ -33,7 +30,8 @@ export function useSmoothAnchors() {
       event.preventDefault();
       const lenis = window.__lenis;
       if (lenis) {
-        lenis.scrollTo(target as HTMLElement, { offset: -NAV_OFFSET, duration: 1.2 });
+        // Sections carry `scroll-mt-28`, which Lenis honours, so no extra offset.
+        lenis.scrollTo(target as HTMLElement, { duration: 1.2 });
       } else {
         target.scrollIntoView({ behavior: "smooth", block: "start" });
       }

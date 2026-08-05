@@ -67,7 +67,7 @@ export function Process() {
     <section
       id="process"
       ref={ref}
-      className="relative w-full overflow-hidden py-24 md:h-dvh md:py-0"
+      className="relative w-full scroll-mt-28 overflow-hidden py-20 md:h-dvh md:py-0"
     >
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute left-1/4 top-1/3 h-72 w-72 rounded-full bg-primary/10 blur-[120px]" />
