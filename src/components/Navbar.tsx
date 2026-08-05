@@ -9,7 +9,6 @@ import {
   useSpring,
 } from "framer-motion";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
-import { cn } from "@/utils/cn";
 import { Button } from "@/components/Button";
 import { Logo } from "@/components/Logo";
 
