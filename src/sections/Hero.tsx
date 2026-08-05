@@ -55,32 +55,45 @@ export function Hero() {
           );
 
         // Content sinks and fades as the hero exits — the front parallax layer.
-        gsap.to("[data-hero-content]", {
-          yPercent: 14,
-          opacity: 0.15,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 0.5,
+        gsap.fromTo(
+          "[data-hero-content]",
+          { yPercent: 0, opacity: 1 },
+          {
+            yPercent: 10,
+            opacity: 0.35,
+            ease: "none",
+            immediateRender: false,
+            scrollTrigger: {
+              trigger: root,
+              start: "top top",
+              end: "bottom bottom",
+              scrub: 0.5,
+              invalidateOnRefresh: true,
+            },
           },
-        });
+        );
 
         // The sticky stage recedes into depth while the next section rises over
         // it — the cinematic hand-off out of the hero.
-        gsap.to("[data-hero-stage]", {
-          scale: 0.92,
-          filter: "blur(6px)",
-          opacity: 0.35,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 0.6,
+        gsap.fromTo(
+          "[data-hero-stage]",
+          { scale: 1, filter: "blur(0px)", opacity: 1 },
+          {
+            scale: 0.96,
+            filter: "blur(3px)",
+            opacity: 0.6,
+            ease: "none",
+            immediateRender: false,
+            scrollTrigger: {
+              trigger: root,
+              start: "top top",
+              end: "bottom bottom",
+              scrub: 0.6,
+              invalidateOnRefresh: true,
+            },
           },
-        });
+        );
+
 
       }, root);
 
