@@ -74,7 +74,7 @@ export function Process() {
         <div className="absolute right-1/4 bottom-1/4 h-72 w-72 rounded-full bg-secondary/10 blur-[130px]" />
       </div>
 
-      <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-center px-6">
+      <div className="mx-auto flex h-full w-full max-w-6xl flex-col justify-center px-6 md:pt-28">
         <header className="mb-10 max-w-2xl" data-fx="up">
           <span className="font-display text-xs uppercase tracking-[0.35em] text-primary">
             Process
