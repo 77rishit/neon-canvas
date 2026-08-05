@@ -192,8 +192,10 @@ export function Hero() {
         </div>
       </div>
 
-      <ScrollIndicator href="#about" />
+        <ScrollIndicator href="#about" />
+      </div>
     </section>
+
   );
 }
 
