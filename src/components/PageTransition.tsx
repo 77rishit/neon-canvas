@@ -12,7 +12,10 @@ export function PageTransition({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const hydrated = useHydrated();
   const firstPath = useRef(pathname);
-  const isFirstRender = !hydrated || pathname === firstPath.current;
+  // Before hydration render the plain tree so client markup matches the server.
+  if (!hydrated) return <>{children}</>;
+
+  const isFirstRender = pathname === firstPath.current;
 
   return (
     <AnimatePresence mode="wait" initial={false}>
