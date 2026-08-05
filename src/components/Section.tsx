@@ -33,19 +33,27 @@ export const Section = forwardRef<HTMLElement, SectionProps>(function Section(
     if (!items.length) return;
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        items,
-        { opacity: 0, y: 22 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power3.out",
-          stagger: 0.12,
-          delay: 0.15,
-          scrollTrigger: { trigger: el, start: "top 90%", once: true },
-        },
-      );
+      gsap
+        .timeline({ scrollTrigger: { trigger: el, start: "top 90%", once: true }, delay: 0.15 })
+        // Anticipation, then a back-eased landing with a soft blur burn-off.
+        .fromTo(
+          items,
+          { opacity: 0, y: 26, filter: "blur(6px)" },
+          {
+            opacity: 1,
+            y: -3,
+            filter: "blur(0px)",
+            duration: 0.85,
+            ease: "expo.out",
+            stagger: 0.12,
+          },
+        )
+        .to(
+          items,
+          { y: 0, duration: 0.45, ease: "power2.inOut", stagger: 0.12, clearProps: "filter,transform" },
+          "-=0.5",
+        );
+
     }, el);
 
     return () => ctx.revert();

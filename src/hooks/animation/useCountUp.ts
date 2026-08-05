@@ -25,10 +25,24 @@ export function useCountUp<T extends HTMLElement = HTMLSpanElement>(
     el.textContent = format(0);
     const proxy = { n: 0 };
     const ctx = gsap.context(() => {
+      // Anticipation: the numeral compresses, then springs as the count runs.
+      gsap.fromTo(
+        el,
+        { scale: 0.94, opacity: 0.4 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: duration * 0.55,
+          ease: "back.out(2)",
+          clearProps: "transform",
+          scrollTrigger: { trigger: el, start: "top 88%", once: true },
+        },
+      );
+
       gsap.to(proxy, {
         n: value,
         duration,
-        ease: "power2.out",
+        ease: "expo.out",
         snap: { n: 1 },
         onUpdate: () => {
           el.textContent = format(proxy.n);
