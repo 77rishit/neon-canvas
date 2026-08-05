@@ -77,13 +77,13 @@ const SIGNATURES: Record<string, Signature> = {
       ease: "power1.in",
     },
     {
-      to: { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, scaleY: 1.01 },
+      to: { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, scaleY: 1 + 0.012 * a },
       duration: 1.15,
       ease: "expo.out",
     },
     { to: { scaleY: 1 }, duration: 0.5, ease: "power2.inOut", at: "-=0.1" },
-    ...(a > 0.8 ? [] : []),
   ],
+
 
   // Competitions — mirrored counterpart to Events.
   "slide-skew-right": (a) => [
