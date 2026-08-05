@@ -1,9 +1,11 @@
-import { memo, type ReactNode } from "react";
-import { motion } from "framer-motion";
-import { fadeUp, stagger, viewportOnce } from "@/utils/motion";
+import { memo, useEffect, useRef, type ReactNode } from "react";
+import { gsap } from "@/utils/gsap";
 import { cn } from "@/utils/cn";
 
-/** Scroll-reveal wrapper: staggers direct children that use <RevealItem>. */
+/**
+ * GSAP scroll-reveal wrapper: staggers direct <RevealItem> children on a single
+ * timeline when the group enters the viewport.
+ */
 function RevealBase({
   children,
   className,
@@ -13,30 +15,46 @@ function RevealBase({
   className?: string;
   delay?: number;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const items = Array.from(el.querySelectorAll<HTMLElement>("[data-reveal-item]"));
+    if (!items.length) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        items,
+        { opacity: 0, y: 38, scale: 0.985 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.85,
+          ease: "expo.out",
+          stagger: delay,
+          clearProps: "transform",
+          scrollTrigger: { trigger: el, start: "top 88%", once: true },
+        },
+      );
+    }, el);
+
+    return () => ctx.revert();
+  }, [delay]);
+
   return (
-    <motion.div
-      variants={stagger(delay)}
-      initial="hidden"
-      whileInView="show"
-      viewport={viewportOnce}
-      className={cn(className)}
-    >
+    <div ref={ref} className={cn(className)}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
-function RevealItemBase({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+function RevealItemBase({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div variants={fadeUp} className={cn(className)}>
+    <div data-reveal-item className={cn(className)}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
