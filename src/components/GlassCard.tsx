@@ -40,7 +40,7 @@ function GlassCardBase({
   return (
     <motion.div
       ref={ref}
-      style={still ? undefined : { rotateX, rotateY, transformPerspective: 900 }}
+      {...(still ? {} : { style: { rotateX, rotateY, transformPerspective: 900 } })}
       {...(still
         ? {}
         : {
