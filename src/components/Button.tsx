@@ -32,7 +32,7 @@ export interface ButtonProps extends HTMLMotionProps<"button"> {
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant = "primary", size = "md", magnetic = true, onPointerDown, ...props },
+  { className, variant = "primary", size = "md", magnetic = true, onPointerDown, children, ...props },
   ref,
 ) {
   const magneticRef = useMagnetic<HTMLButtonElement>(0.3);
@@ -56,7 +56,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
 
   return (
     <motion.button
-      ref={magnetic ? (ref ?? magneticRef) === ref ? magneticRef : magneticRef : ref}
+      ref={magnetic ? magneticRef : ref}
       onPointerDown={handlePointerDown}
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
@@ -82,7 +82,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
           }}
         />
       ))}
-      <span className="relative z-10 inline-flex items-center gap-2">{props.children}</span>
+      <span className="relative z-10 inline-flex items-center gap-2">{children as React.ReactNode}</span>
     </motion.button>
   );
 });
