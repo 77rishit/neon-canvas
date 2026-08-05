@@ -10,6 +10,11 @@ import { fadeUp, stagger } from "@/utils/motion";
 
 const PHRASES = ["neural interfaces.", "immersive 3D worlds.", "kinetic web systems."];
 
+const HEADING_LINES: { words: string[]; glow: boolean }[] = [
+  { words: ["Design", "beyond"], glow: false },
+  { words: ["the", "interface"], glow: true },
+];
+
 export function Hero() {
   const typed = useTypingText(PHRASES);
 
