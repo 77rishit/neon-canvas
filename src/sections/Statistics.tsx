@@ -1,42 +1,33 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { FiAward, FiClock, FiUsers, FiZap } from "react-icons/fi";
 import { Section } from "@/components/Section";
-import { GlassCard } from "@/components/GlassCard";
-import { ParallaxBackdrop } from "@/components/ParallaxBackdrop";
-import { Reveal, RevealItem } from "@/components/Reveal";
+import { STATS } from "@/data/fest";
 
-const STATS = [
-  { icon: FiZap, value: 128, suffix: "+", label: "Projects shipped" },
-  { icon: FiAward, value: 18, suffix: "", label: "Industry awards" },
-  { icon: FiUsers, value: 46, suffix: "M", label: "Sessions served" },
-  { icon: FiClock, value: 0.9, suffix: "s", label: "Median load time" },
-];
-
-function Counter({ to, suffix }: { to: number; suffix: string }) {
+/** Count-up number that starts when it scrolls into view. */
+function Counter({ value, suffix }: { value: number; suffix: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.6 });
-  const [value, setValue] = useState(0);
-  const decimals = to % 1 !== 0 ? 1 : 0;
+  const [display, setDisplay] = useState(0);
 
   useEffect(() => {
     if (!inView) return;
-    let raf = 0;
-    const start = performance.now();
     const duration = 1600;
-    const tick = (now: number) => {
-      const p = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setValue(to * eased);
+    const start = performance.now();
+    let raf = 0;
+    const tick = (t: number) => {
+      const p = Math.min(1, (t - start) / duration);
+      // easeOutExpo for a snappy finish
+      const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+      setDisplay(Math.round(value * eased));
       if (p < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView, to]);
+  }, [inView, value]);
 
   return (
-    <span ref={ref} className="font-display text-4xl font-bold text-gradient-neon md:text-5xl">
-      {value.toFixed(decimals)}
+    <span ref={ref} className="tabular-nums">
+      {display.toLocaleString("en-IN")}
       {suffix}
     </span>
   );
@@ -45,34 +36,34 @@ function Counter({ to, suffix }: { to: number; suffix: string }) {
 export function Statistics() {
   return (
     <Section
-      id="stats"
-      eyebrow="Statistics"
-      title="Numbers that hold up"
-      description="Measured across the last five years of shipped work, not rounded up for the deck."
-      className="overflow-hidden"
+      id="statistics"
+      eyebrow="By the numbers"
+      title="The scale of the grid"
+      description="Figures from the 2025 edition. This year's targets are already tracking twenty percent ahead."
     >
-      <ParallaxBackdrop align="right" />
-
-      <Reveal className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {STATS.map(({ icon: Icon, value, suffix, label }, i) => (
-          <RevealItem key={label}>
-            <GlassCard tone={i % 2 ? "secondary" : "primary"} className="h-full text-center">
-              <motion.span
-                whileHover={{ rotate: -8, scale: 1.1 }}
-                className="mx-auto grid h-12 w-12 place-items-center rounded-xl border border-primary/30 bg-primary/10 text-primary"
-              >
-                <Icon size={22} />
-              </motion.span>
-              <div className="mt-5">
-                <Counter to={value} suffix={suffix} />
-              </div>
-              <p className="mt-2 font-display text-[0.6rem] uppercase tracking-[0.3em] text-muted-foreground">
-                {label}
-              </p>
-            </GlassCard>
-          </RevealItem>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {STATS.map((stat, i) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 40, rotateZ: -3 }}
+            whileInView={{ opacity: 1, y: 0, rotateZ: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+            className="glass-panel relative overflow-hidden rounded-2xl p-7 text-center"
+          >
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 animate-pulse bg-[radial-gradient(circle_at_50%_120%,color-mix(in_srgb,var(--primary)_16%,transparent),transparent_65%)]"
+            />
+            <p className="relative font-display text-[clamp(2.2rem,5vw,3.2rem)] font-bold leading-none text-gradient-neon">
+              <Counter value={stat.value} suffix={stat.suffix} />
+            </p>
+            <p className="relative mt-4 font-display text-[0.55rem] uppercase tracking-[0.3em] text-muted-foreground">
+              {stat.label}
+            </p>
+          </motion.div>
         ))}
-      </Reveal>
+      </div>
     </Section>
   );
 }

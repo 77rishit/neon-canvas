@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import {
   motion,
   AnimatePresence,
@@ -11,13 +10,19 @@ import {
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 import { Button } from "@/components/Button";
 import { Logo } from "@/components/Logo";
+import { useActiveSection } from "@/hooks/useActiveSection";
+import { scrollToSection, scrollToTop } from "@/utils/scroll";
 
-const links = [
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Work", href: "#work" },
-  { label: "FAQ", href: "#faq" },
-  { label: "Contact", href: "#contact" },
+export const NAV_LINKS = [
+  { label: "Home", id: "home" },
+  { label: "About", id: "about" },
+  { label: "Events", id: "events" },
+  { label: "Competitions", id: "competitions" },
+  { label: "Sponsors", id: "sponsors" },
+  { label: "Gallery", id: "gallery" },
+  { label: "Team", id: "team" },
+  { label: "FAQ", id: "faq" },
+  { label: "Contact", id: "contact" },
 ];
 
 export function Navbar() {
@@ -25,9 +30,12 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const { scrollY } = useScroll();
 
-  // The glass shell fades in on the first scroll, then keeps thinning out so the
+  const ids = useMemo(() => NAV_LINKS.map((l) => l.id), []);
+  const active = useActiveSection(ids);
+
+  // The glass shell fades in on the first scroll, then thins out again so the
   // bar reads as an ever lighter HUD the deeper you travel.
-  const shellOpacity = useSpring(useTransform(scrollY, [0, 120, 900], [0, 1, 0.42]), {
+  const shellOpacity = useSpring(useTransform(scrollY, [0, 120, 1400], [0, 1, 0.5]), {
     stiffness: 120,
     damping: 26,
   });
@@ -41,6 +49,12 @@ export function Navbar() {
     };
   }, [open]);
 
+  const go = (id: string) => {
+    setOpen(false);
+    if (id === "home") scrollToTop();
+    else scrollToSection(`#${id}`);
+  };
+
   return (
     <motion.header
       initial={{ y: -90, opacity: 0 }}
@@ -49,44 +63,67 @@ export function Navbar() {
       className="fixed inset-x-0 top-0 z-50 px-4 pt-4"
     >
       <motion.nav
+        aria-label="Primary"
         animate={{
-          maxWidth: scrolled ? 900 : 1180,
-          paddingTop: scrolled ? 10 : 18,
-          paddingBottom: scrolled ? 10 : 18,
+          maxWidth: scrolled ? 1160 : 1280,
+          paddingTop: scrolled ? 10 : 16,
+          paddingBottom: scrolled ? 10 : 16,
         }}
         transition={{ type: "spring", stiffness: 180, damping: 26 }}
-        className="relative mx-auto flex items-center justify-between rounded-2xl border border-transparent px-5"
+        className="relative mx-auto flex items-center justify-between gap-4 rounded-2xl border border-transparent px-5"
       >
         <motion.span
           aria-hidden
           style={{ opacity: shellOpacity }}
           className="glass-panel shadow-glow pointer-events-none absolute inset-0 -z-10 rounded-2xl"
         />
-        <Link to="/" aria-label="NEOGRID home">
+        <button
+          type="button"
+          onClick={() => go("home")}
+          aria-label="NEO//GRID Techfest, back to top"
+          className="shrink-0 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
           <Logo />
-        </Link>
+        </button>
 
-        <ul className="hidden items-center gap-9 md:flex">
-          {links.map((link, i) => (
-            <motion.li
-              key={link.href}
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 + i * 0.08 }}
-            >
-              <a
-                href={link.href}
-                className="relative font-display text-[0.68rem] uppercase tracking-[0.28em] text-muted-foreground transition-colors hover:text-primary after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-full after:origin-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-left hover:after:scale-x-100"
+        <ul className="hidden items-center gap-5 lg:flex xl:gap-7">
+          {NAV_LINKS.map((link, i) => {
+            const isActive = active === link.id;
+            return (
+              <motion.li
+                key={link.id}
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 + i * 0.05 }}
               >
-                {link.label}
-              </a>
-            </motion.li>
-          ))}
+                <a
+                  href={`#${link.id}`}
+                  aria-current={isActive ? "true" : undefined}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    go(link.id);
+                  }}
+                  className={`relative font-display text-[0.62rem] uppercase tracking-[0.24em] transition-colors ${
+                    isActive ? "text-primary" : "text-muted-foreground hover:text-primary"
+                  }`}
+                >
+                  {link.label}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-active"
+                      className="absolute -bottom-1.5 left-0 h-px w-full bg-primary shadow-[0_0_10px_var(--primary)]"
+                      transition={{ type: "spring", stiffness: 320, damping: 30 }}
+                    />
+                  )}
+                </a>
+              </motion.li>
+            );
+          })}
         </ul>
 
-        <div className="hidden md:block">
-          <Button size="sm" variant="outline">
-            Enter Grid
+        <div className="hidden shrink-0 lg:block">
+          <Button size="sm" onClick={() => scrollToSection("#registration")}>
+            Register
           </Button>
         </div>
 
@@ -95,7 +132,7 @@ export function Navbar() {
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="-mr-2 grid min-h-11 min-w-11 place-items-center rounded-md text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
+          className="-mr-2 grid min-h-11 min-w-11 place-items-center rounded-md text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
         >
           {open ? <HiX size={26} /> : <HiMenuAlt3 size={26} />}
         </button>
@@ -108,23 +145,35 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.25 }}
-            className="glass-panel mx-auto mt-3 overflow-hidden rounded-2xl md:hidden"
+            className="glass-panel mx-auto mt-3 max-h-[74dvh] overflow-y-auto rounded-2xl lg:hidden"
           >
             <ul className="flex flex-col gap-1 p-5">
-              {links.map((link) => (
-                <li key={link.href}>
+              {NAV_LINKS.map((link) => (
+                <li key={link.id}>
                   <a
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className="block py-3 font-display text-sm uppercase tracking-[0.24em] text-muted-foreground transition-colors hover:text-primary"
+                    href={`#${link.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      go(link.id);
+                    }}
+                    className={`block py-3 font-display text-sm uppercase tracking-[0.22em] transition-colors ${
+                      active === link.id ? "text-primary" : "text-muted-foreground hover:text-primary"
+                    }`}
                   >
                     {link.label}
                   </a>
                 </li>
               ))}
               <li className="pt-3">
-                <Button size="sm" className="w-full" onClick={() => setOpen(false)}>
-                  Enter Grid
+                <Button
+                  size="sm"
+                  className="w-full"
+                  onClick={() => {
+                    setOpen(false);
+                    scrollToSection("#registration");
+                  }}
+                >
+                  Register Now
                 </Button>
               </li>
             </ul>
