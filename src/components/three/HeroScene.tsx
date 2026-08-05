@@ -19,22 +19,83 @@ import { Particles } from "./Particles";
 import { FloatingCubes } from "./FloatingCubes";
 import { AnimatedLines } from "./AnimatedLines";
 
-/** Subtle parallax camera driven by pointer + a slow idle orbit. */
-function CameraRig() {
+/** Normalised hero scroll progress (0 at top, 1 once the hero has passed). */
+function useScrollProgress() {
+  const progress = useRef(0);
+  useEffect(() => {
+    const read = () => {
+      progress.current = Math.min(1, window.scrollY / Math.max(1, window.innerHeight));
+    };
+    read();
+    window.addEventListener("scroll", read, { passive: true });
+    window.addEventListener("resize", read);
+    return () => {
+      window.removeEventListener("scroll", read);
+      window.removeEventListener("resize", read);
+    };
+  }, []);
+  return progress;
+}
+
+/**
+ * Parallax camera driven by pointer + a slow idle orbit, pushed further back and
+ * lower as the page scrolls so the scene reads cinematically on the way out.
+ */
+function CameraRig({ progress }: { progress: MutableRefObject<number> }) {
   const { camera } = useThree();
   const target = useRef({ x: 0, y: 0 });
 
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
+    const p = progress.current;
     target.current.x = state.pointer.x * 1.1 + Math.sin(t * 0.15) * 0.3;
     target.current.y = state.pointer.y * 0.6 + Math.cos(t * 0.12) * 0.2;
 
     camera.position.x = MathUtils.damp(camera.position.x, target.current.x, 1.6, delta);
-    camera.position.y = MathUtils.damp(camera.position.y, 0.35 + target.current.y, 1.6, delta);
-    camera.lookAt(0, 0.25, 0);
+    camera.position.y = MathUtils.damp(
+      camera.position.y,
+      0.35 + target.current.y - p * 1.4,
+      1.6,
+      delta,
+    );
+    camera.position.z = MathUtils.damp(camera.position.z, 11 + p * 4.5, 1.6, delta);
+    camera.lookAt(0, 0.25 - p * 0.5, 0);
   });
 
   return null;
+}
+
+/** Key light gently cools and dims as the hero scrolls away. */
+function ScrollLights({ progress }: { progress: MutableRefObject<number> }) {
+  const spot = useRef<SpotLight>(null);
+  const fill = useRef<PointLight>(null);
+
+  useFrame((_, delta) => {
+    const p = progress.current;
+    if (spot.current) {
+      spot.current.intensity = MathUtils.damp(spot.current.intensity, 90 - p * 55, 2, delta);
+    }
+    if (fill.current) {
+      fill.current.intensity = MathUtils.damp(fill.current.intensity, 40 + p * 45, 2, delta);
+    }
+  });
+
+  return (
+    <>
+      <spotLight
+        ref={spot}
+        position={[5, 6, 5]}
+        angle={0.5}
+        penumbra={1}
+        intensity={90}
+        color="#00F5FF"
+        castShadow
+        shadow-mapSize={[1024, 1024]}
+        shadow-bias={-0.0004}
+      />
+      <pointLight ref={fill} position={[-5, -2, 3]} intensity={40} color="#7B2EFF" />
+    </>
+  );
 }
 
 export function HeroScene({ className }: { className?: string }) {
