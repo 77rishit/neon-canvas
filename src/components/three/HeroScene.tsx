@@ -12,6 +12,7 @@ import {
 import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
 import { useState } from "react";
 import { MathUtils } from "three";
+import type { PointLight, SpotLight } from "three";
 
 import { Robot } from "./Robot";
 import { HoloRings } from "./HoloRings";
@@ -100,6 +101,7 @@ function ScrollLights({ progress }: { progress: MutableRefObject<number> }) {
 
 export function HeroScene({ className }: { className?: string }) {
   const [degraded, setDegraded] = useState(false);
+  const progress = useScrollProgress();
 
   return (
     <div className={className}>
@@ -114,17 +116,7 @@ export function HeroScene({ className }: { className?: string }) {
         <Suspense fallback={null}>
           <ambientLight intensity={0.35} />
           <hemisphereLight args={["#00F5FF", "#7B2EFF", 0.18]} />
-          <spotLight
-            position={[5, 6, 5]}
-            angle={0.5}
-            penumbra={1}
-            intensity={90}
-            color="#00F5FF"
-            castShadow
-            shadow-mapSize={[1024, 1024]}
-            shadow-bias={-0.0004}
-          />
-          <pointLight position={[-5, -2, 3]} intensity={40} color="#7B2EFF" />
+          <ScrollLights progress={progress} />
           <Environment preset="night" />
 
           <Robot />
@@ -142,7 +134,7 @@ export function HeroScene({ className }: { className?: string }) {
             color="#062a33"
           />
 
-          <CameraRig />
+          <CameraRig progress={progress} />
 
           {!degraded && (
             <EffectComposer enableNormalPass={false}>
