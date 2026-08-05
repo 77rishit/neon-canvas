@@ -1,4 +1,4 @@
-import { Suspense, useRef } from "react";
+import { Suspense, useEffect, useRef, type MutableRefObject } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   AdaptiveDpr,
