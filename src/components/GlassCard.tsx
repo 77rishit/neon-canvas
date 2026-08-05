@@ -1,8 +1,9 @@
+import type { ReactNode } from "react";
 import { motion, type HTMLMotionProps } from "framer-motion";
 import { cn } from "@/utils/cn";
 
 export interface GlassCardProps extends Omit<HTMLMotionProps<"div">, "children"> {
-  children?: React.ReactNode;
+  children?: ReactNode;
   /** Adds a violet neon edge instead of the default cyan. */
   tone?: "primary" | "secondary";
   /** Disables the hover lift (for static panels). */
