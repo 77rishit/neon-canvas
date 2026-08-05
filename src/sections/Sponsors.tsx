@@ -1,16 +1,54 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { gsap } from "@/utils/gsap";
 import { Section } from "@/components/Section";
 import { SPONSORS } from "@/data/fest";
+import { useHorizontalScrub } from "@/hooks/animation/useHorizontalScrub";
 
 /**
- * Sponsor carousel: an auto-advancing, drag-free rail with working manual
- * controls. Auto-play pauses on hover and focus.
+ * Sponsor rail with horizontal choreography.
+ *
+ * On desktop the row is scrubbed sideways by the page scroll (GSAP drives the
+ * rail's scrollLeft), so the section reads as a horizontal pass inside a
+ * vertical page. Narrow screens keep a timed auto-advance and native swipe.
+ * Manual controls work in both modes.
  */
 export function Sponsors() {
-  const railRef = useRef<HTMLDivElement>(null);
+  const railRef = useHorizontalScrub<HTMLDivElement>({ amount: 0.92 });
+  const listRef = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
+  const [scrubbed, setScrubbed] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px) and (prefers-reduced-motion: no-preference)");
+    const sync = () => setScrubbed(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  // Tiles fan in one after another as the rail arrives.
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        "[data-sponsor]",
+        { opacity: 0, x: 60, rotateY: -14 },
+        {
+          opacity: 1,
+          x: 0,
+          rotateY: 0,
+          duration: 0.8,
+          ease: "expo.out",
+          stagger: 0.06,
+          clearProps: "transform",
+          scrollTrigger: { trigger: el, start: "top 88%", once: true },
+        },
+      );
+    }, el);
+    return () => ctx.revert();
+  }, []);
 
   const scrollBy = useCallback((dir: 1 | -1) => {
     const rail = railRef.current;
@@ -21,13 +59,13 @@ export function Sponsors() {
     else if (dir === -1 && rail.scrollLeft <= 8)
       rail.scrollTo({ left: rail.scrollWidth, behavior: "smooth" });
     else rail.scrollBy({ left: step * dir, behavior: "smooth" });
-  }, []);
+  }, [railRef]);
 
   useEffect(() => {
-    if (paused) return;
+    if (paused || scrubbed) return;
     const id = window.setInterval(() => scrollBy(1), 3200);
     return () => window.clearInterval(id);
-  }, [paused, scrollBy]);
+  }, [paused, scrubbed, scrollBy]);
 
   return (
     <Section
@@ -37,6 +75,7 @@ export function Sponsors() {
       description="Nine partners fund the prize pool, staff the mentor desks and run the recruiter lounge across all three days."
     >
       <div
+        ref={listRef}
         className="relative"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
@@ -45,23 +84,19 @@ export function Sponsors() {
       >
         <div
           ref={railRef}
-          className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 [perspective:1000px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           role="group"
           aria-label="Sponsor logos"
         >
-          {SPONSORS.map((sponsor, i) => (
-            <motion.a
+          {SPONSORS.map((sponsor) => (
+            <a
               key={sponsor.name}
+              data-sponsor
               href={sponsor.url}
               target="_blank"
               rel="noreferrer noopener sponsored"
               aria-label={`${sponsor.name} — ${sponsor.tier} (opens in a new tab)`}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.5, delay: (i % 4) * 0.07 }}
-              whileHover={{ y: -8 }}
-              className="group glass-panel relative flex min-w-[15rem] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-2xl px-8 py-10 outline-none transition-colors duration-300 hover:border-primary/45 hover:shadow-[0_0_40px_-14px_var(--primary)] focus-visible:ring-2 focus-visible:ring-ring"
+              className="group glass-panel relative flex min-w-[15rem] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-2xl px-8 py-10 outline-none transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-2 hover:border-primary/45 hover:shadow-[0_0_40px_-14px_var(--primary)] focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span
                 aria-hidden
@@ -78,9 +113,8 @@ export function Sponsors() {
               <span className="pointer-events-none absolute bottom-3 font-display text-[0.5rem] uppercase tracking-[0.28em] text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 Visit site ↗
               </span>
-            </motion.a>
+            </a>
           ))}
-
         </div>
 
         <div className="mt-6 flex items-center gap-3">
@@ -101,7 +135,7 @@ export function Sponsors() {
             <FiChevronRight size={20} />
           </button>
           <span className="font-display text-[0.52rem] uppercase tracking-[0.28em] text-muted-foreground">
-            {paused ? "Auto-scroll paused" : "Auto-scrolling"}
+            {scrubbed ? "Scroll-linked rail" : paused ? "Auto-scroll paused" : "Auto-scrolling"}
           </span>
         </div>
       </div>
