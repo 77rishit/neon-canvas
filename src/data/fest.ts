@@ -207,15 +207,15 @@ export const COMPETITIONS: Competition[] = [
 ];
 
 export const SPONSORS = [
-  { name: "Vertexa", tier: "Title Partner" },
-  { name: "NovaCloud", tier: "Platinum" },
-  { name: "Quantel", tier: "Platinum" },
-  { name: "Hexaform", tier: "Gold" },
-  { name: "Lumendrive", tier: "Gold" },
-  { name: "Orbital AI", tier: "Gold" },
-  { name: "Strux Labs", tier: "Silver" },
-  { name: "Pulsewave", tier: "Silver" },
-  { name: "Corebyte", tier: "Silver" },
+  { name: "Vertexa", tier: "Title Partner", url: "https://vertexa.example.com" },
+  { name: "NovaCloud", tier: "Platinum", url: "https://novacloud.example.com" },
+  { name: "Quantel", tier: "Platinum", url: "https://quantel.example.com" },
+  { name: "Hexaform", tier: "Gold", url: "https://hexaform.example.com" },
+  { name: "Lumendrive", tier: "Gold", url: "https://lumendrive.example.com" },
+  { name: "Orbital AI", tier: "Gold", url: "https://orbital-ai.example.com" },
+  { name: "Strux Labs", tier: "Silver", url: "https://struxlabs.example.com" },
+  { name: "Pulsewave", tier: "Silver", url: "https://pulsewave.example.com" },
+  { name: "Corebyte", tier: "Silver", url: "https://corebyte.example.com" },
 ] as const;
 
 export const GALLERY = [
