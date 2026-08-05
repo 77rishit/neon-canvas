@@ -39,7 +39,29 @@ export function useSmoothAnchors() {
     }
 
     document.addEventListener("click", onClick);
-    return () => document.removeEventListener("click", onClick);
+
+    // Deep links: honour a valid `#section` on first load once layout settles,
+    // and drop stale hashes that no longer match a section on the page.
+    const initial = window.location.hash;
+    let timer = 0;
+    if (initial && initial.length > 1) {
+      const target = document.querySelector(initial);
+      if (target) {
+        timer = window.setTimeout(() => {
+          const lenis = window.__lenis;
+          if (lenis) lenis.scrollTo(target as HTMLElement, { duration: 1 });
+          else target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 400);
+      } else {
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
+    }
+
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("click", onClick);
+    };
+
   }, []);
 }
 
