@@ -24,9 +24,14 @@ export function GlassCard({
   return (
     <motion.div
       {...(still ? {} : { whileHover: { y: -6 } })}
+      onPointerMove={(e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
+      }}
       transition={{ type: "spring", stiffness: 260, damping: 22 }}
       className={cn(
-        "group/card glass-panel relative h-full overflow-hidden rounded-2xl transition-colors duration-300",
+        "group/card glass-panel neon-border-anim hover-light relative h-full overflow-hidden rounded-2xl transition-colors duration-300",
         tone === "primary"
           ? "hover:border-primary/45 hover:shadow-[0_0_38px_-12px_var(--primary)]"
           : "hover:border-secondary/45 hover:shadow-[0_0_38px_-12px_var(--secondary)]",
