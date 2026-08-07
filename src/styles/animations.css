@@ -6,8 +6,14 @@
   color: transparent;
 
   /* Split-text reveals wrap each line in nested block spans, which stops
-     Chromium from painting the parent's clipped gradient. Re-apply the clip
-     on every generated line so masked headings stay visible. */
+     Chromium from painting the parent's clipped gradient consistently.
+     Disable the parent's paint once lines exist; otherwise Chromium can draw
+     both the original glyph run and the generated lines, visually stacking
+     words on top of one another. */
+  &:has(> .split-line) {
+    background-image: none;
+  }
+
   & .split-line-inner {
     background-image: var(--gradient-neon);
     background-clip: text;
