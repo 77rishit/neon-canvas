@@ -37,156 +37,254 @@ type Step = {
 
 type Signature = (amp: number) => Step[];
 
-/** One distinct entrance per section — no repeated fade-ups. */
+/**
+ * One distinct transition per act of THE DIGITAL SINGULARITY.
+ *
+ * No fades, no slides: every section arrives through a different physical
+ * event — reality dissolving, digital fragmentation, an energy wave, light
+ * distortion, holographic reconstruction, a liquid morph, quantum collapse or
+ * particle assembly — and each is choreographed in three beats.
+ */
 const SIGNATURES: Record<string, Signature> = {
-  // About — depth-of-field pull. Drifts a touch further out of focus before
-  // the lens snaps, then breathes past 1:1 and settles back.
-  "blur-focus": (a) => [
+  // Act 1 — reality dissolves out of the void and resolves into matter.
+  dissolve: (a) => [
     {
-      from: { opacity: 0, scale: 1.05, filter: `blur(${10 * a}px)`, y: -8 * a },
-      to: { opacity: 0.35, scale: 1.08, filter: `blur(${16 * a}px)`, y: 0 },
-      duration: 0.28,
+      from: {
+        opacity: 0,
+        scale: 1.06,
+        filter: `blur(${18 * a}px) brightness(2.2) saturate(2)`,
+        clipPath: "polygon(0% 42%, 100% 38%, 100% 62%, 0% 58%)",
+      },
+      to: { opacity: 0.4, filter: `blur(${22 * a}px) brightness(2.6) saturate(2.4)` },
+      duration: 0.3,
       ease: "power1.inOut",
     },
     {
-      to: { opacity: 1, scale: 0.995, filter: "blur(0px)" },
+      to: {
+        opacity: 1,
+        scale: 0.997,
+        filter: "blur(0px) brightness(1) saturate(1)",
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+      },
+      duration: 1.15,
+      ease: "expo.out",
+    },
+    { to: { scale: 1, clearProps: "clipPath" }, duration: 0.5, ease: "power2.inOut", at: "-=0.12" },
+  ],
+
+  // Act 2 — the world breaks: the panel tears into digital shards then heals.
+  "digital-fragment": (a) => [
+    {
+      from: {
+        opacity: 0,
+        x: -46 * a,
+        skewX: 6 * a,
+        filter: `blur(${9 * a}px) contrast(1.7)`,
+        clipPath:
+          "polygon(0% 0%,100% 0%,100% 18%,0% 26%,0% 34%,100% 28%,100% 62%,0% 56%,0% 72%,100% 68%,100% 100%,0% 100%)",
+      },
+      to: { x: 40 * a, skewX: -6 * a, opacity: 0.55 },
+      duration: 0.22,
+      ease: "steps(4)",
+    },
+    {
+      to: {
+        opacity: 1,
+        x: -6 * a,
+        skewX: 0,
+        filter: "blur(0px) contrast(1)",
+        clipPath:
+          "polygon(0% 0%,100% 0%,100% 100%,0% 100%,0% 100%,100% 100%,100% 100%,0% 100%,0% 100%,100% 100%,100% 100%,0% 100%)",
+      },
+      duration: 0.95,
+      ease: "expo.out",
+    },
+    { to: { x: 0, clearProps: "clipPath" }, duration: 0.5, ease: "power2.out", at: "-=0.15" },
+  ],
+
+  // Act 3 — an energy wave rolls through the surface and leaves it charged.
+  "energy-wave": (a) => [
+    {
+      from: {
+        opacity: 0,
+        scaleX: 1.08,
+        scaleY: 0.72,
+        filter: `blur(${12 * a}px) brightness(2.4)`,
+        transformOrigin: "50% 50%",
+      },
+      to: { scaleY: 0.6, opacity: 0.5, filter: `blur(${16 * a}px) brightness(3)` },
+      duration: 0.24,
+      ease: "power2.in",
+    },
+    {
+      to: { opacity: 1, scaleY: 1.05, scaleX: 0.99, filter: "blur(0px) brightness(1)" },
+      duration: 1.05,
+      ease: "elastic.out(0.6, 0.55)",
+    },
+    { to: { scaleX: 1, scaleY: 1 }, duration: 0.45, ease: "power2.inOut", at: "-=0.2" },
+  ],
+
+  // Act 4 — reality bends: the panel refracts through distorted light.
+  "light-distortion": (a) => [
+    {
+      from: {
+        opacity: 0,
+        rotate: 2.4 * a,
+        skewY: -4 * a,
+        scale: 1.1,
+        filter: `blur(${14 * a}px) hue-rotate(70deg) saturate(2.6)`,
+      },
+      to: { rotate: 3.4 * a, skewY: -5.5 * a, opacity: 0.45 },
+      duration: 0.26,
+      ease: "power2.in",
+    },
+    {
+      to: {
+        opacity: 1,
+        rotate: -0.6 * a,
+        skewY: 0.8 * a,
+        scale: 0.995,
+        filter: "blur(0px) hue-rotate(0deg) saturate(1)",
+      },
       duration: 1.05,
       ease: "expo.out",
     },
-    { to: { scale: 1 }, duration: 0.55, ease: "power2.inOut", at: "-=0.12" },
+    { to: { rotate: 0, skewY: 0, scale: 1 }, duration: 0.55, ease: "power2.inOut", at: "-=0.16" },
   ],
 
-  // Events — pulls back to the left before gliding in, skew unwinding late.
-  "slide-skew-left": (a) => [
+  // Act 5 — gravity disappears: the panel drifts up and settles weightlessly.
+  "gravity-lift": (a) => [
     {
-      from: { opacity: 0, x: -100 * a, skewY: 2.5 * a },
-      to: { x: -130 * a, skewY: 4 * a, opacity: 0.2 },
-      duration: 0.26,
+      from: { opacity: 0, y: 70 * a, rotateX: 16 * a, transformOrigin: "50% 120%" },
+      to: { y: 88 * a, rotateX: 22 * a, opacity: 0.2 },
+      duration: 0.28,
       ease: "power2.in",
     },
-    { to: { opacity: 1, x: 10 * a, skewY: -0.8 * a }, duration: 1, ease: "expo.out" },
-    { to: { x: 0, skewY: 0 }, duration: 0.6, ease: "power2.out", at: "-=0.18" },
+    { to: { opacity: 1, y: -14 * a, rotateX: -3 * a }, duration: 1.2, ease: "expo.out" },
+    { to: { y: 0, rotateX: 0 }, duration: 0.7, ease: "sine.inOut", at: "-=0.25" },
   ],
 
-  // Registration — curtain from the centre line, easing wide then breathing in.
-  curtain: (a) => [
+  // Act 6 — holographic reconstruction, scanned in from the top edge.
+  "holo-reconstruct": (a) => [
     {
-      from: { clipPath: "inset(46% 0% 46% 0%)", opacity: 0.35, scaleY: 0.98 },
-      to: { clipPath: "inset(49% 0% 49% 0%)", opacity: 0.45 },
-      duration: 0.24,
-      ease: "power1.in",
-    },
-    {
-      to: { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, scaleY: 1 + 0.012 * a },
-      duration: 1.15,
-      ease: "expo.out",
-    },
-    { to: { scaleY: 1 }, duration: 0.5, ease: "power2.inOut", at: "-=0.1" },
-  ],
-
-
-  // Competitions — mirrored counterpart to Events.
-  "slide-skew-right": (a) => [
-    {
-      from: { opacity: 0, x: 100 * a, skewY: -2.5 * a },
-      to: { x: 130 * a, skewY: -4 * a, opacity: 0.2 },
-      duration: 0.26,
-      ease: "power2.in",
-    },
-    { to: { opacity: 1, x: -10 * a, skewY: 0.8 * a }, duration: 1, ease: "expo.out" },
-    { to: { x: 0, skewY: 0 }, duration: 0.6, ease: "power2.out", at: "-=0.18" },
-  ],
-
-  // Sponsors — a wipe that unmasks left to right, the panel drifting with it.
-  "wipe-right": (a) => [
-    {
-      from: { clipPath: "inset(0% 100% 0% 0%)", x: -24 * a },
-      to: { x: -34 * a },
-      duration: 0.2,
-      ease: "power1.in",
-    },
-    {
-      to: { clipPath: "inset(0% 0% 0% 0%)", x: 6 * a },
-      duration: 1.15,
-      ease: "expo.out",
-    },
-    { to: { x: 0 }, duration: 0.55, ease: "power2.out", at: "-=0.2" },
-  ],
-
-  // Gallery — bottom-up mask, the frame sinking before it rises and overshoots.
-  "mask-up": (a) => [
-    {
-      from: { clipPath: "inset(0% 0% 100% 0%)", scale: 1.04, y: 26 * a },
-      to: { y: 38 * a, scale: 1.06 },
-      duration: 0.26,
-      ease: "power2.in",
-    },
-    {
-      to: { clipPath: "inset(0% 0% 0% 0%)", y: -6 * a, scale: 0.998 },
-      duration: 1.15,
-      ease: "expo.out",
-    },
-    { to: { y: 0, scale: 1 }, duration: 0.6, ease: "power2.inOut", at: "-=0.15" },
-  ],
-
-  // Team — 3D flip that tips further back before swinging past flat.
-  flip: (a) => [
-    {
-      from: { opacity: 0, rotateX: 22 * a, y: 48 * a, transformOrigin: "50% 0%" },
-      to: { rotateX: 30 * a, y: 62 * a, opacity: 0.15 },
-      duration: 0.26,
-      ease: "power2.in",
-    },
-    { to: { opacity: 1, rotateX: -4 * a, y: 0 }, duration: 0.95, ease: "expo.out" },
-    { to: { rotateX: 0 }, duration: 0.55, ease: "power2.inOut", at: "-=0.15" },
-  ],
-
-  // Testimonials — a lens pulling back from a blurred close-up, past focus.
-  "zoom-out": (a) => [
-    {
-      from: { opacity: 0, scale: 0.9, filter: `blur(${7 * a}px)` },
-      to: { scale: 0.87, opacity: 0.2, filter: `blur(${10 * a}px)` },
-      duration: 0.26,
-      ease: "power2.in",
-    },
-    { to: { opacity: 1, scale: 1.015, filter: "blur(0px)" }, duration: 0.95, ease: "expo.out" },
-    { to: { scale: 1 }, duration: 0.5, ease: "power2.inOut", at: "-=0.12" },
-  ],
-
-  // FAQ — vertical curtain dropping from the top edge with a rebound.
-  "wipe-down": (a) => [
-    {
-      from: { clipPath: "inset(0% 0% 100% 0%)", opacity: 0.5, y: -14 * a },
-      to: { y: -22 * a },
+      from: {
+        opacity: 0,
+        clipPath: "inset(0% 0% 100% 0%)",
+        filter: `brightness(2.6) saturate(2.2) blur(${6 * a}px)`,
+        y: -18 * a,
+      },
+      to: { opacity: 0.6, y: -26 * a },
       duration: 0.22,
+      ease: "steps(5)",
+    },
+    {
+      to: {
+        opacity: 1,
+        clipPath: "inset(0% 0% 0% 0%)",
+        filter: "brightness(1) saturate(1) blur(0px)",
+        y: 6 * a,
+      },
+      duration: 1.1,
+      ease: "expo.out",
+    },
+    { to: { y: 0, clearProps: "clipPath" }, duration: 0.5, ease: "power2.out", at: "-=0.18" },
+  ],
+
+  // Act 7 — the world reconstructs: a liquid morph settling into a solid.
+  "liquid-morph": (a) => [
+    {
+      from: {
+        opacity: 0,
+        scaleX: 0.82,
+        scaleY: 1.14,
+        borderRadius: "48%",
+        filter: `blur(${13 * a}px)`,
+      },
+      to: { scaleX: 0.76, scaleY: 1.2, opacity: 0.35 },
+      duration: 0.26,
+      ease: "power2.in",
+    },
+    {
+      to: { opacity: 1, scaleX: 1.03, scaleY: 0.97, borderRadius: "0%", filter: "blur(0px)" },
+      duration: 1.1,
+      ease: "expo.out",
+    },
+    { to: { scaleX: 1, scaleY: 1 }, duration: 0.6, ease: "elastic.out(0.5, 0.6)", at: "-=0.2" },
+  ],
+
+  // Quantum collapse — space folds inward from all four edges.
+  "quantum-collapse": (a) => [
+    {
+      from: {
+        opacity: 0,
+        clipPath: "inset(38% 38% 38% 38%)",
+        scale: 1.16,
+        filter: `blur(${10 * a}px) brightness(2)`,
+      },
+      to: { clipPath: "inset(46% 46% 46% 46%)", opacity: 0.5, scale: 1.2 },
+      duration: 0.24,
+      ease: "power2.in",
+    },
+    {
+      to: {
+        opacity: 1,
+        clipPath: "inset(0% 0% 0% 0%)",
+        scale: 0.99,
+        filter: "blur(0px) brightness(1)",
+      },
+      duration: 1.15,
+      ease: "expo.out",
+    },
+    { to: { scale: 1, clearProps: "clipPath" }, duration: 0.5, ease: "power2.inOut", at: "-=0.14" },
+  ],
+
+  // Particle assembly — the panel condenses out of scattered light.
+  "particle-assembly": (a) => [
+    {
+      from: {
+        opacity: 0,
+        scale: 0.88,
+        filter: `blur(${20 * a}px) brightness(2.8)`,
+        rotate: -1.6 * a,
+      },
+      to: { scale: 0.84, opacity: 0.4, filter: `blur(${26 * a}px) brightness(3.2)` },
+      duration: 0.26,
       ease: "power1.in",
     },
-    { to: { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, y: 5 * a }, duration: 1.05, ease: "expo.out" },
-    { to: { y: 0 }, duration: 0.5, ease: "power2.out", at: "-=0.18" },
+    {
+      to: { opacity: 1, scale: 1.02, rotate: 0.4 * a, filter: "blur(0px) brightness(1)" },
+      duration: 1.05,
+      ease: "expo.out",
+    },
+    { to: { scale: 1, rotate: 0 }, duration: 0.55, ease: "back.out(1.5)", at: "-=0.18" },
   ],
 
-  // Contact — pivots off its base line, dipping before it swings up level.
-  "rise-rotate": (a) => [
+  // Reality bend — the surface pivots out of a warped plane.
+  "reality-bend": (a) => [
     {
-      from: { opacity: 0, y: 60 * a, rotate: -2.2 * a, transformOrigin: "0% 100%" },
-      to: { y: 76 * a, rotate: -3.2 * a, opacity: 0.15 },
+      from: { opacity: 0, rotateY: 26 * a, x: 70 * a, transformOrigin: "100% 50%" },
+      to: { rotateY: 34 * a, x: 92 * a, opacity: 0.2 },
       duration: 0.26,
       ease: "power2.in",
     },
-    { to: { opacity: 1, y: 0, rotate: 0.6 * a }, duration: 1, ease: "expo.out" },
-    { to: { rotate: 0 }, duration: 0.55, ease: "power2.inOut", at: "-=0.15" },
+    { to: { opacity: 1, rotateY: -5 * a, x: -10 * a }, duration: 1.05, ease: "expo.out" },
+    { to: { rotateY: 0, x: 0 }, duration: 0.6, ease: "power2.inOut", at: "-=0.18" },
   ],
 
-  // Timeline — telescopes out of the page, compressing first.
-  telescope: (a) => [
+  // Signal sweep — data scans in from the left through a compressing mask.
+  "signal-sweep": (a) => [
     {
-      from: { opacity: 0, scaleY: 0.88, y: 42 * a, transformOrigin: "50% 0%" },
-      to: { scaleY: 0.82, y: 54 * a, opacity: 0.2 },
-      duration: 0.26,
-      ease: "power2.in",
+      from: { opacity: 0, clipPath: "inset(0% 100% 0% 0%)", x: -26 * a, skewX: 5 * a },
+      to: { x: -38 * a, opacity: 0.5 },
+      duration: 0.2,
+      ease: "steps(4)",
     },
-    { to: { opacity: 1, scaleY: 1.02, y: 0 }, duration: 0.95, ease: "expo.out" },
-    { to: { scaleY: 1 }, duration: 0.5, ease: "power2.inOut", at: "-=0.12" },
+    {
+      to: { opacity: 1, clipPath: "inset(0% 0% 0% 0%)", x: 8 * a, skewX: -1 * a },
+      duration: 1.1,
+      ease: "expo.out",
+    },
+    { to: { x: 0, skewX: 0, clearProps: "clipPath" }, duration: 0.5, ease: "power2.out", at: "-=0.2" },
   ],
 
   // Generic staggered grid, used by inner card grids: settles with a soft
@@ -200,6 +298,7 @@ const SIGNATURES: Record<string, Signature> = {
     },
   ],
 };
+
 
 /** Props a signature may touch; cleared once the entrance is done. */
 const CLEAR = "filter,clipPath,transform,willChange";
