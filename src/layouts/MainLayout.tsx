@@ -6,6 +6,8 @@ import { MouseGlow } from "@/components/MouseGlow";
 import { NoiseOverlay } from "@/components/NoiseOverlay";
 import { ParticleField } from "@/components/ParticleField";
 import { LightBeams } from "@/components/LightBeams";
+import { QuantumBackdrop } from "@/components/QuantumBackdrop";
+
 
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { PageTransition } from "@/components/PageTransition";
