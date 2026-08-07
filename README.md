@@ -1,98 +1,196 @@
-# 🚀 CyberNode – Next Generation Interactive Experience
+<div align="center">
 
-> A cinematic, futuristic web experience built with React, Vite, GSAP, React Three Fiber and modern web technologies.
+# 🚀 CyberNode
 
-![Banner](./public/preview.png)
+### Next-Generation Interactive 3D Experience
 
----
-
-## 🌌 Overview
-
-CyberNode is an immersive interactive website inspired by modern creative development, combining cinematic motion design, 3D experiences, and smooth storytelling into one seamless digital journey.
-
-Instead of behaving like a traditional landing page, CyberNode delivers an evolving experience where every section is connected through fluid transitions, interactive animations, and dynamic visual effects.
+An immersive cinematic web experience powered by React, GSAP, React Three Fiber, and modern frontend technologies.
 
 ---
 
-## ✨ Features
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)
 
-### 🎨 Modern UI
-- Futuristic Cyberpunk Design
-- Glassmorphism
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript)
+
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite)
+
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss)
+
+![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge)
+
+![React Three Fiber](https://img.shields.io/badge/React_Three_Fiber-000000?style=for-the-badge&logo=three.js)
+
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge)
+
+![License](https://img.shields.io/badge/License-MIT-success?style=for-the-badge)
+
+---
+
+### ✨ Built for immersive storytelling, cinematic animations and modern web experiences.
+
+</div>
+
+---
+
+# 🌌 Overview
+
+CyberNode is a premium interactive web experience that combines modern frontend technologies with cinematic motion design.
+
+Instead of a traditional landing page, CyberNode delivers a seamless digital journey where every section feels connected through smooth transitions, interactive effects, and immersive visuals.
+
+The project focuses on performance, responsiveness, and creating memorable user experiences inspired by award-winning creative websites.
+
+---
+
+# 🎯 Features
+
+## 🎨 Premium User Interface
+
+- Modern Cyberpunk Design
 - Responsive Layout
+- Glassmorphism Components
 - Dark Theme
 - Neon Glow Effects
-- Premium Typography
+- Professional Typography
+- Interactive UI Elements
 
-### 🎬 Motion Design
-- GSAP Animations
+---
+
+## 🎬 Cinematic Motion Design
+
+- GSAP Timeline Animations
 - ScrollTrigger
-- Cinematic Scroll Experience
-- Smooth Page Transitions
+- Smooth Scroll Experience
 - Stagger Animations
-- Split Text Effects
-- Floating Elements
-- Interactive Hover Effects
+- Split Text Animations
+- Layered Motion Effects
+- Cinematic Section Transitions
+- Floating UI Components
 
-### 🌌 Interactive Experience
-- Quantum Portal Hero
-- Animated Background
-- Dynamic Lighting
+---
+
+## 🌌 Interactive Experience
+
+- Animated Hero Scene
+- Dynamic Background
 - Mouse Parallax
-- Custom Cursor Effects
-- Live Particle System
-- Idle Animations
+- Interactive Hover Effects
+- Scroll Driven Storytelling
+- Smooth Scene Changes
+- Animated Cards
+- Live Motion Effects
 
-### ⚡ Performance
+---
+
+## 🖱️ Micro Interactions
+
+- Magnetic Buttons
+- Hover Glow Effects
+- Ripple Click Animation
+- Glass Reflection
+- Smooth Hover States
+- Dynamic Shadows
+- Interactive Borders
+
+---
+
+## ⚡ Performance Optimized
+
 - React 19
 - Vite
-- Code Splitting
 - Lazy Loading
 - GPU Accelerated Animations
+- Code Splitting
 - Optimized Assets
-- 60 FPS Motion
+- High FPS Rendering
 
 ---
 
-# 🛠️ Tech Stack
+# 🎬 Animation Highlights
 
-| Technology | Purpose |
-|------------|----------|
-| React 19 | Frontend Framework |
-| TypeScript | Type Safety |
-| Vite | Build Tool |
-| Tailwind CSS | Styling |
-| GSAP | Motion Design |
-| ScrollTrigger | Scroll Animations |
-| Lenis | Smooth Scrolling |
-| Framer Motion | UI Animations |
-| React Three Fiber | 3D Rendering |
-| Drei | Three.js Helpers |
-| React Icons | Icons |
+The entire experience is powered by modern motion design principles.
+
+### Hero
+
+- Cinematic entrance
+- Animated background
+- Floating visual elements
+- Dynamic lighting
+- Split text animation
+- Interactive buttons
+
+### Scroll Experience
+
+- Scroll-driven animations
+- Smooth transitions
+- Layered movement
+- Progressive reveals
+- Scene-to-scene storytelling
+
+### Cards
+
+- Staggered entrance
+- Hover animations
+- Floating movement
+- Glow effects
+- Depth transitions
+
+### Background
+
+- Animated gradients
+- Moving particles
+- Dynamic lighting
+- Continuous ambient motion
+
+### Interactive Elements
+
+- Button animations
+- Hover effects
+- Cursor interactions
+- Smooth transitions
 
 ---
 
-# 📂 Project Structure
+# 🛠 Tech Stack
 
-```
+| Category | Technologies |
+|----------|--------------|
+| Frontend | React 19 |
+| Language | TypeScript |
+| Build Tool | Vite |
+| Styling | Tailwind CSS |
+| Animation | GSAP |
+| Motion | ScrollTrigger |
+| Smooth Scroll | Lenis |
+| UI Animation | Framer Motion |
+| 3D | React Three Fiber |
+| Helpers | Drei |
+| Icons | React Icons |
+
+---
+
+# 📂 Folder Structure
+
+```text
 src/
 │
-├── animations/
+├── assets/
 ├── components/
+├── sections/
+├── animations/
 ├── hooks/
 ├── providers/
-├── sections/
 ├── utils/
-├── assets/
 ├── styles/
 │
 ├── App.tsx
-└── main.tsx
+├── main.tsx
+└── index.css
 ```
 
 ---
 
-# 🎯 Website Sections
+# 📖 Website Structure
 
 - Hero
 - About
@@ -113,13 +211,13 @@ src/
 Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/cybernode.git
+git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
 ```
 
-Go inside project
+Move inside project
 
 ```bash
-cd cybernode
+cd YOUR_REPOSITORY
 ```
 
 Install dependencies
@@ -128,7 +226,7 @@ Install dependencies
 npm install
 ```
 
-Start development server
+Run development server
 
 ```bash
 npm run dev
@@ -136,7 +234,7 @@ npm run dev
 
 ---
 
-# 🏗️ Build
+# 🏗 Production Build
 
 ```bash
 npm run build
@@ -150,46 +248,39 @@ npm run preview
 
 ---
 
-# 🌐 Deployment
+# 🌍 Deployment
 
-This project is optimized for deployment on:
+The project is ready to deploy on
 
 - Vercel
 - Netlify
 - GitHub Pages
 
-Recommended:
+### Vercel Configuration
+
+Framework
 
 ```
-Framework : Vite
+Vite
+```
 
-Build Command:
+Build Command
+
+```bash
 npm run build
+```
 
-Output Directory:
+Output Directory
+
+```
 dist
 ```
 
 ---
 
-# 🎨 Design Philosophy
+# 📱 Responsive Design
 
-The project focuses on creating an emotional user experience rather than a conventional landing page.
-
-Core principles include:
-
-- Storytelling through motion
-- Seamless section transitions
-- Immersive interactions
-- Performance-first development
-- Responsive by default
-- Minimal yet futuristic aesthetics
-
----
-
-# 📱 Responsive
-
-Optimized for:
+Fully optimized for
 
 - Desktop
 - Laptop
@@ -198,47 +289,95 @@ Optimized for:
 
 ---
 
-# ⚙️ Performance Optimizations
+# ⚡ Performance
 
+Optimized for
+
+- Fast Initial Load
 - Lazy Loading
-- Code Splitting
-- Optimized Images
-- GPU Transforms
-- Efficient React Rendering
+- GPU Accelerated Animations
 - Minimal Layout Shift
-- Smooth 60 FPS Animations
+- Optimized Rendering
+- High Performance Scroll Animations
 
 ---
 
-# 📦 Scripts
+# 🎨 Design Philosophy
+
+CyberNode is designed around a simple idea:
+
+> **A website should feel like an experience, not just a collection of pages.**
+
+Every interaction is carefully crafted to create an immersive journey through modern motion design, fluid transitions, and responsive interfaces.
+
+---
+
+# 📦 Available Scripts
 
 ```bash
-npm run dev       # Development
-
-npm run build     # Production Build
-
-npm run preview   # Preview Build
-
-npm run lint      # ESLint
+npm run dev
 ```
+
+Runs the project in development mode.
+
+---
+
+```bash
+npm run build
+```
+
+Creates the production build.
+
+---
+
+```bash
+npm run preview
+```
+
+Previews the production build locally.
+
+---
+
+```bash
+npm run lint
+```
+
+Runs ESLint for code quality.
 
 ---
 
 # 🤝 Contributing
 
-Contributions are welcome.
+Contributions are welcome!
 
 1. Fork the repository
 2. Create a feature branch
+
+```bash
+git checkout -b feature-name
+```
+
 3. Commit your changes
-4. Push to your branch
+
+```bash
+git commit -m "Add new feature"
+```
+
+4. Push to GitHub
+
+```bash
+git push origin feature-name
+```
+
 5. Open a Pull Request
 
 ---
 
 # 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the **MIT License**.
+
+Feel free to use, modify, and improve it for learning or personal projects.
 
 ---
 
@@ -248,10 +387,18 @@ This project is licensed under the MIT License.
 
 Computer Engineering Student
 
-Built with ❤️ using React, GSAP and modern web technologies.
+Frontend Developer • React Developer • UI/UX Enthusiast
+
+GitHub: https://github.com/YOUR_USERNAME
 
 ---
 
-## ⭐ If you like this project
+<div align="center">
 
-Give it a ⭐ on GitHub and share your feedback!
+## ⭐ If you enjoyed this project
+
+Give it a **Star ⭐** on GitHub.
+
+Made with ❤️ using React, GSAP, TypeScript and modern web technologies.
+
+</div>
