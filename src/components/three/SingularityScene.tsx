@@ -638,16 +638,22 @@ export function SingularityScene({ reduced = false }: { reduced?: boolean }) {
       }}
       camera={{ position: [0, 0, 9], fov: 45 }}
       frameloop={reduced ? "demand" : "always"}
-      // Drop quality before dropping frames when the tab is under load.
-      performance={{ min: 0.5, max: 1, debounce: 200 }}
+      // Never regress quality mid-interaction: a resolution drop during a
+      // scroll burst reads as the particles stalling, which is worse than the
+      // frame it saves. Quality is only tuned by the sustained-FPS monitor.
+      performance={{ min: 1, max: 1, debounce: 1000 }}
     >
+      {/* Only reacts to a *sustained* change in frame rate (flipflops guard
+          stops it oscillating), so resolution never churns while scrolling. */}
       <PerformanceMonitor
         factor={1}
+        ms={250}
+        iterations={8}
+        flipflops={3}
         onIncline={() => setDpr((d) => Math.min(1.5, d + 0.25))}
         onDecline={() => setDpr((d) => Math.max(0.75, d - 0.25))}
+        onFallback={() => setDpr(0.75)}
       />
-      {/* Halves resolution during heavy scroll bursts, restores it when idle. */}
-      <AdaptiveDpr pixelated />
       <VisibilityGate />
       <VoidField />
       <Monolith />
@@ -658,5 +664,6 @@ export function SingularityScene({ reduced = false }: { reduced?: boolean }) {
     </Canvas>
   );
 }
+
 
 export default SingularityScene;
