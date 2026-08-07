@@ -31,7 +31,7 @@ export function QuantumBackdrop() {
       <div className="absolute inset-0 bg-background" />
       {hydrated && (
         <Suspense fallback={null}>
-          <div className="absolute inset-0 opacity-90">
+          <div className="absolute inset-0 opacity-80">
             <QuantumPortalScene reduced={reduced} />
           </div>
         </Suspense>

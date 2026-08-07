@@ -77,7 +77,7 @@ const auroraFrag = /* glsl */ `
     float glow = exp(-length(p - mp) * 2.1);
     col += mix(uCyan, uViolet, 0.35) * glow * 0.28;
 
-    col *= 0.30 + uEnergy * 0.55;
+    col *= 0.20 + uEnergy * 0.40;
     col += abs(uVel) * uCyan * 0.03;
 
     // Vignette so the copy layer above always keeps contrast.
@@ -182,7 +182,7 @@ function PortalRings() {
             color={ring.color}
             toneMapped={false}
             transparent
-            opacity={0.85}
+            opacity={0.6}
             blending={AdditiveBlending}
             depthWrite={false}
           />
