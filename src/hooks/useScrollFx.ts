@@ -301,7 +301,7 @@ const SIGNATURES: Record<string, Signature> = {
 
 
 /** Props a signature may touch; cleared once the entrance is done. */
-const CLEAR = "filter,clipPath,transform,willChange";
+const CLEAR = "filter,clipPath,transform,willChange,borderRadius";
 
 /** Builds one signature timeline onto `tl` for `targets`. */
 function playSteps(
