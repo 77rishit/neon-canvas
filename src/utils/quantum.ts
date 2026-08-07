@@ -121,32 +121,54 @@ export function startQuantumBus() {
   started = true;
 
   let last = window.scrollY;
-  const onScroll = () => {
-    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  // Cached so the per-frame read never forces a layout (scrollHeight is a
+  // reflow trigger). Refreshed on resize and on a slow interval instead.
+  let max = 1;
+  const measure = () => {
+    max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  };
+
+  // Scroll events fire faster than the display refreshes; collapse them into
+  // one rAF-aligned update so the WebGL frame reads a single coherent state.
+  let queued = false;
+  const read = () => {
+    queued = false;
     const y = window.scrollY;
     quantum.scroll = clamp01(y / max);
     quantum.velocity = Math.max(-1, Math.min(1, (y - last) / 60));
     deriveWorld(quantum.scroll);
     last = y;
   };
+  const onScroll = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(read);
+  };
+  const onResize = () => {
+    measure();
+    onScroll();
+  };
   const onMove = (e: PointerEvent) => {
     quantum.pointerX = (e.clientX / window.innerWidth) * 2 - 1;
     quantum.pointerY = (e.clientY / window.innerHeight) * 2 - 1;
   };
 
-  onScroll();
+  measure();
+  read();
   mutateWorld();
+  const remeasure = window.setInterval(measure, 2000);
   const mutation = window.setInterval(mutateWorld, 30000);
 
   window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll);
+  window.addEventListener("resize", onResize);
   window.addEventListener("pointermove", onMove, { passive: true });
 
   return () => {
     started = false;
     window.clearInterval(mutation);
     window.removeEventListener("scroll", onScroll);
-    window.removeEventListener("resize", onScroll);
+    window.removeEventListener("resize", onResize);
+    window.clearInterval(remeasure);
     window.removeEventListener("pointermove", onMove);
   };
 }

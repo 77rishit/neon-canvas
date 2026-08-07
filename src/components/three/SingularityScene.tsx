@@ -1,5 +1,6 @@
-import { useMemo, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { AdaptiveDpr, PerformanceMonitor } from "@react-three/drei";
 import {
   AdditiveBlending,
   Color,
@@ -39,11 +40,12 @@ const VIOLET = new Color("#7b2eff");
 /* ---------------------------------------------------------- shared glsl --- */
 
 const NOISE = /* glsl */ `
+  // Sine-free hash: transcendentals are the single most expensive thing a
+  // full-screen noise field can do per pixel, and this costs a few mults.
   vec3 hash3(vec3 p) {
-    p = vec3(dot(p, vec3(127.1, 311.7, 74.7)),
-             dot(p, vec3(269.5, 183.3, 246.1)),
-             dot(p, vec3(113.5, 271.9, 124.6)));
-    return fract(sin(p) * 43758.5453123) * 2.0 - 1.0;
+    p = fract(p * vec3(0.1031, 0.1030, 0.0973));
+    p += dot(p, p.yxz + 33.33);
+    return fract((p.xxy + p.yxx) * p.zyx) * 2.0 - 1.0;
   }
   float snoise(vec3 p) {
     vec3 i = floor(p), f = fract(p);
@@ -58,9 +60,13 @@ const NOISE = /* glsl */ `
           mix(dot(hash3(i + vec3(0,1,1)), f - vec3(0,1,1)),
               dot(hash3(i + vec3(1,1,1)), f - vec3(1,1,1)), u.x), u.y), u.z);
   }
+  // Two octaves: enough for domain warping, where detail is invisible.
+  float fbm2(vec3 p) {
+    return 0.5 * snoise(p) + 0.25 * snoise(p * 2.03);
+  }
   float fbm3(vec3 p) {
     float v = 0.0, a = 0.5;
-    for (int i = 0; i < 5; i++) { v += a * snoise(p); p *= 2.03; a *= 0.5; }
+    for (int i = 0; i < 3; i++) { v += a * snoise(p); p *= 2.03; a *= 0.5; }
     return v;
   }
   vec3 hueShift(vec3 c, float a) {
@@ -159,9 +165,10 @@ const voidFrag = /* glsl */ `
 
     // Volumetric fog: two domain-warped fbm layers drifting against each other.
     vec3 q = vec3(p * 1.5, t * 0.035 + sd);
-    vec3 warp = vec3(fbm3(q * 0.9 + 3.1), fbm3(q * 0.9 - 1.7), fbm3(q * 0.7 + 8.4));
+    vec2 w2 = vec2(fbm2(q * 0.9 + 3.1), fbm2(q * 0.9 - 1.7));
+    vec3 warp = vec3(w2, w2.x * 0.6);
     float fog = fbm3(q * 1.6 + warp * (1.2 + uChaos * 1.6));
-    float fog2 = fbm3(q * 3.1 - warp * 0.8 + vec3(0.0, t * 0.05, 0.0));
+    float fog2 = fbm2(q * 3.1 - warp * 0.8 + vec3(0.0, t * 0.05, 0.0));
     float density = smoothstep(0.05, 0.85, fog * 0.7 + fog2 * 0.45) * (0.35 + uFog);
 
     // Liquid light: caustic sheets sliding through the fog.
@@ -395,7 +402,13 @@ const FRAGMENTS = 90;
 function Fragments() {
   const mesh = useRef<InstancedMesh>(null);
   const dummy = useMemo(
-    () => ({ m: new Matrix4(), q: new Quaternion(), p: new Vector3(), s: new Vector3() }),
+    () => ({
+      m: new Matrix4(),
+      q: new Quaternion(),
+      p: new Vector3(),
+      s: new Vector3(),
+      axis: new Vector3(),
+    }),
     [],
   );
   const seeds = useMemo(
@@ -428,10 +441,10 @@ function Fragments() {
         s.y * (0.7 + chaos * 0.8) + lift + Math.sin(t * 0.4 + s.drift) * 0.25,
         Math.sin(a) * r * 0.7,
       );
-      dummy.q.setFromAxisAngle(
-        new Vector3(Math.sin(s.drift), Math.cos(s.drift), 0.4).normalize(),
-        t * s.spin + s.drift,
-      );
+      // Reused axis vector: allocating inside the frame loop would hand the
+      // GC 90 objects every frame and show up as periodic stutter.
+      dummy.axis.set(Math.sin(s.drift), Math.cos(s.drift), 0.4).normalize();
+      dummy.q.setFromAxisAngle(dummy.axis, t * s.spin + s.drift);
       const sc = s.scale * (0.6 + energy * 0.8 + chaos * 0.5);
       dummy.s.setScalar(sc);
       dummy.m.compose(dummy.p, dummy.q, dummy.s);
@@ -584,19 +597,63 @@ function WorldCamera() {
   return null;
 }
 
+/**
+ * Stops the render loop whenever the tab is hidden. A backgrounded WebGL loop
+ * still burns GPU time and delays the first frames when the user returns.
+ */
+function VisibilityGate() {
+  const { invalidate, setFrameloop } = useThree();
+  useEffect(() => {
+    const sync = () => {
+      const hidden = document.visibilityState === "hidden";
+      setFrameloop(hidden ? "never" : "always");
+      if (!hidden) invalidate();
+    };
+    document.addEventListener("visibilitychange", sync);
+    return () => document.removeEventListener("visibilitychange", sync);
+  }, [invalidate, setFrameloop]);
+  return null;
+}
+
+/**
+ * The universe is one full-screen shader stack, so cost scales with pixels
+ * rather than with geometry. Resolution is therefore the throttle: we start at
+ * a modest device-pixel ratio and let `PerformanceMonitor` walk it down the
+ * moment the measured frame rate drops below the refresh budget — which keeps
+ * a 60Hz laptop, a 90Hz tablet and a 120Hz phone all pinned to their own
+ * ceiling instead of forcing one fixed quality on every device.
+ */
 export function SingularityScene({ reduced = false }: { reduced?: boolean }) {
+  const [dpr, setDpr] = useState(1);
+
   return (
     <Canvas
-      dpr={[1, reduced ? 1 : 1.5]}
-      gl={{ antialias: false, alpha: false, powerPreference: "high-performance" }}
+      dpr={reduced ? 1 : dpr}
+      gl={{
+        antialias: false,
+        alpha: false,
+        powerPreference: "high-performance",
+        stencil: false,
+        depth: true,
+      }}
       camera={{ position: [0, 0, 9], fov: 45 }}
       frameloop={reduced ? "demand" : "always"}
+      // Drop quality before dropping frames when the tab is under load.
+      performance={{ min: 0.5, max: 1, debounce: 200 }}
     >
+      <PerformanceMonitor
+        factor={1}
+        onIncline={() => setDpr((d) => Math.min(1.5, d + 0.25))}
+        onDecline={() => setDpr((d) => Math.max(0.75, d - 0.25))}
+      />
+      {/* Halves resolution during heavy scroll bursts, restores it when idle. */}
+      <AdaptiveDpr pixelated />
+      <VisibilityGate />
       <VoidField />
       <Monolith />
       <EnergySphere />
       <Fragments />
-      <NeuralDust count={reduced ? 260 : 900} />
+      <NeuralDust count={reduced ? 260 : 700} />
       <WorldCamera />
     </Canvas>
   );
