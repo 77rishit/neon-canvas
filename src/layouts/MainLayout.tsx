@@ -4,7 +4,6 @@ import { Footer } from "@/components/Footer";
 import { CustomCursor } from "@/components/CustomCursor";
 import { MouseGlow } from "@/components/MouseGlow";
 import { NoiseOverlay } from "@/components/NoiseOverlay";
-import { ParticleField } from "@/components/ParticleField";
 import { LightBeams } from "@/components/LightBeams";
 import { QuantumBackdrop } from "@/components/QuantumBackdrop";
 
@@ -45,7 +44,6 @@ export function MainLayout({ children }: { children: ReactNode }) {
       <QuantumBackdrop />
       <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <LightBeams />
-        <ParticleField />
       </div>
       <NoiseOverlay />
       <MouseGlow />

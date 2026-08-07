@@ -1,5 +1,6 @@
-import { useMemo, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { AdaptiveDpr, PerformanceMonitor } from "@react-three/drei";
 import {
   AdditiveBlending,
   Color,
@@ -590,19 +591,63 @@ function WorldCamera() {
   return null;
 }
 
+/**
+ * Stops the render loop whenever the tab is hidden. A backgrounded WebGL loop
+ * still burns GPU time and delays the first frames when the user returns.
+ */
+function VisibilityGate() {
+  const { invalidate, setFrameloop } = useThree();
+  useEffect(() => {
+    const sync = () => {
+      const hidden = document.visibilityState === "hidden";
+      setFrameloop(hidden ? "never" : "always");
+      if (!hidden) invalidate();
+    };
+    document.addEventListener("visibilitychange", sync);
+    return () => document.removeEventListener("visibilitychange", sync);
+  }, [invalidate, setFrameloop]);
+  return null;
+}
+
+/**
+ * The universe is one full-screen shader stack, so cost scales with pixels
+ * rather than with geometry. Resolution is therefore the throttle: we start at
+ * a modest device-pixel ratio and let `PerformanceMonitor` walk it down the
+ * moment the measured frame rate drops below the refresh budget — which keeps
+ * a 60Hz laptop, a 90Hz tablet and a 120Hz phone all pinned to their own
+ * ceiling instead of forcing one fixed quality on every device.
+ */
 export function SingularityScene({ reduced = false }: { reduced?: boolean }) {
+  const [dpr, setDpr] = useState(1);
+
   return (
     <Canvas
-      dpr={[1, reduced ? 1 : 1.5]}
-      gl={{ antialias: false, alpha: false, powerPreference: "high-performance" }}
+      dpr={reduced ? 1 : dpr}
+      gl={{
+        antialias: false,
+        alpha: false,
+        powerPreference: "high-performance",
+        stencil: false,
+        depth: true,
+      }}
       camera={{ position: [0, 0, 9], fov: 45 }}
       frameloop={reduced ? "demand" : "always"}
+      // Drop quality before dropping frames when the tab is under load.
+      performance={{ min: 0.5, max: 1, debounce: 200 }}
     >
+      <PerformanceMonitor
+        factor={1}
+        onIncline={() => setDpr((d) => Math.min(1.5, d + 0.25))}
+        onDecline={() => setDpr((d) => Math.max(0.75, d - 0.25))}
+      />
+      {/* Halves resolution during heavy scroll bursts, restores it when idle. */}
+      <AdaptiveDpr pixelated />
+      <VisibilityGate />
       <VoidField />
       <Monolith />
       <EnergySphere />
       <Fragments />
-      <NeuralDust count={reduced ? 260 : 900} />
+      <NeuralDust count={reduced ? 260 : 700} />
       <WorldCamera />
     </Canvas>
   );
