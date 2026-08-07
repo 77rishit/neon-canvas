@@ -16,62 +16,75 @@ import { FAQ } from "@/sections/FAQ";
 import { Contact } from "@/sections/Contact";
 
 /**
- * Techfest landing page composition.
+ * THE DIGITAL SINGULARITY — one continuous journey through an unstable world.
  *
- * Sections are imported statically so the document server-renders in one pass
- * (SEO + no hydration flash); the heavy WebGL hero is the one lazy boundary.
- * Each wrapper declares a UNIQUE GSAP entrance signature — see useScrollFx —
- * so no two sections share the same choreography. Between them, SectionSeam
- * draws a scrubbed hairline so the hand-off reads as one continuous shot.
- * Statistics owns the page's single pinned beat and drives its own timeline.
+ * The page is not a stack of sections but eight acts of the same reality:
+ * stable, breaking, fragmenting, bending, weightless, holographic,
+ * reconstructing and stable again. The WebGL universe behind the document
+ * reads the same scroll position (see `@/utils/quantum`), so what the copy
+ * says and what the world does are always the same beat.
+ *
+ * Each wrapper declares a UNIQUE transition — see useScrollFx — and no two
+ * repeat: reality dissolves, fragments digitally, rides an energy wave, bends
+ * light, loses gravity, reconstructs holographically, morphs like liquid and
+ * finally collapses into place. Nothing here fades or slides.
  */
 export function Home() {
   return (
     <RegistrationProvider>
       <MainLayout>
         <Hero />
-        <div data-fx="blur-focus">
+        {/* act 1 — reality is stable */}
+        <div data-fx="dissolve">
           <About />
         </div>
         <SectionSeam align="left" />
-        <div data-fx="slide-skew-left">
+        {/* act 2 — the world starts breaking */}
+        <div data-fx="digital-fragment">
           <Events />
         </div>
-        <div data-fx="curtain">
+        <div data-fx="energy-wave">
           <Registration />
         </div>
         <SectionSeam align="right" />
-        <div data-fx="slide-skew-right">
+        {/* act 3 — fragments float free */}
+        <div data-fx="particle-assembly">
           <Competitions />
         </div>
-        <div data-fx="wipe-right">
+        <div data-fx="signal-sweep">
           <Sponsors />
         </div>
         <SectionSeam />
-        <div data-fx="mask-up">
+        {/* act 4 — reality bends */}
+        <div data-fx="light-distortion">
           <Gallery />
         </div>
         <Statistics />
-        <div data-fx="telescope">
+        <div data-fx="reality-bend">
           <Timeline />
         </div>
         <SectionSeam align="left" />
-        <div data-fx="flip">
+        {/* act 5 — gravity disappears */}
+        <div data-fx="gravity-lift">
           <Team />
         </div>
-        <div data-fx="zoom-out">
+        {/* act 6 — everything becomes holographic */}
+        <div data-fx="holo-reconstruct">
           <Testimonials />
         </div>
         <SectionSeam align="right" />
-        <div data-fx="wipe-down">
+        {/* act 7 — the world reconstructs itself */}
+        <div data-fx="liquid-morph">
           <FAQ />
         </div>
-        <div data-fx="rise-rotate">
+        {/* final — reality stabilises */}
+        <div data-fx="quantum-collapse">
           <Contact />
         </div>
       </MainLayout>
     </RegistrationProvider>
   );
 }
+
 
 export default Home;

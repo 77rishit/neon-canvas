@@ -2,19 +2,20 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import { useHydrated } from "@/hooks/useHydrated";
 import { startQuantumBus } from "@/utils/quantum";
 
-/** WebGL is browser-only: the portal module loads after hydration. */
-const QuantumPortalScene = lazy(() =>
-  import("./three/QuantumPortalScene").then((m) => ({ default: m.QuantumPortalScene })),
+/** WebGL is browser-only: the universe module loads after hydration. */
+const SingularityScene = lazy(() =>
+  import("./three/SingularityScene").then((m) => ({ default: m.SingularityScene })),
 );
 
 /**
- * Persistent Quantum Portal backdrop.
+ * Persistent backdrop for THE DIGITAL SINGULARITY.
  *
- * One fixed WebGL layer behind the entire document — aurora, energy waves,
- * volumetric halo, orbiting particles and the portal rings. It never stops
- * moving, and its state is driven by the shared quantum bus (scroll, velocity,
- * pointer) so every section reads as a different moment of one continuous
- * journey rather than an isolated block.
+ * One fixed WebGL layer behind the entire document — infinite void, volumetric
+ * fog, liquid light, neural signals, a morphing energy body and quantum
+ * fragments. It never stops evolving: scroll drives the eight acts of the
+ * story, the pointer bends the light, and every ~30 seconds the environment
+ * itself mutates (seed, hue, glow, light direction, particle pattern) so the
+ * world is never twice the same.
  */
 export function QuantumBackdrop() {
   const hydrated = useHydrated();
@@ -31,8 +32,8 @@ export function QuantumBackdrop() {
       <div className="absolute inset-0 bg-background" />
       {hydrated && (
         <Suspense fallback={null}>
-          <div className="absolute inset-0 opacity-80">
-            <QuantumPortalScene reduced={reduced} />
+          <div className="absolute inset-0 opacity-70">
+            <SingularityScene reduced={reduced} />
           </div>
         </Suspense>
       )}

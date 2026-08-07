@@ -87,7 +87,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       {ripples.map((r) => (
         <span
           key={r.id}
-          className="pointer-events-none absolute -z-0 rounded-full bg-foreground/30 animate-ripple"
+          className="pointer-events-none absolute -z-0 rounded-full border border-current bg-current/10 animate-shockwave"
           style={{
             left: r.x - r.size / 2,
             top: r.y - r.size / 2,

@@ -36,11 +36,12 @@ function GlassCardBase({
       <div
         ref={tiltRef}
         className={cn(
-          "group/card glass-panel neon-border-anim hover-light relative h-full overflow-hidden rounded-2xl transition-colors duration-300",
+          "group/card glass-panel panel-alive neon-border-anim edge-electric glass-bend hover-light relative h-full overflow-hidden rounded-2xl transition-colors duration-300",
           tone === "primary"
             ? "hover:border-primary/45 hover:shadow-[0_0_38px_-12px_var(--primary)]"
             : "hover:border-secondary/45 hover:shadow-[0_0_38px_-12px_var(--secondary)]",
         )}
+
         {...props}
       >
         {/* sheen sweep */}
