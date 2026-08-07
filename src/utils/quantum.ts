@@ -138,12 +138,34 @@ export function startQuantumBus() {
     quantum.velocity = Math.max(-1, Math.min(1, (y - last) / 60));
     deriveWorld(quantum.scroll);
     last = y;
+    // Scroll events stop firing the instant the wheel settles. Without an
+    // explicit wind-down the last velocity would stay pinned and the orbiting
+    // particles would look frozen off-centre, so ease it back to rest.
+    if (!decaying) {
+      decaying = true;
+      requestAnimationFrame(decay);
+    }
+  };
+  let decaying = false;
+  const decay = () => {
+    if (queued) {
+      decaying = false;
+      return;
+    }
+    quantum.velocity *= 0.88;
+    if (Math.abs(quantum.velocity) < 0.001) {
+      quantum.velocity = 0;
+      decaying = false;
+      return;
+    }
+    requestAnimationFrame(decay);
   };
   const onScroll = () => {
     if (queued) return;
     queued = true;
     requestAnimationFrame(read);
   };
+
   const onResize = () => {
     measure();
     onScroll();
