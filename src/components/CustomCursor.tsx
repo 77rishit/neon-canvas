@@ -11,6 +11,7 @@ export function CustomCursor() {
   const isMobile = useIsMobile();
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+  const trailRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const dot = dotRef.current;
@@ -59,10 +60,84 @@ export function CustomCursor() {
     };
   }, [isMobile]);
 
+  /**
+   * Energy trail: a chain of springy followers painted on one canvas, so the
+   * cursor leaves a decaying comet of portal light behind it.
+   */
+  useEffect(() => {
+    const canvas = trailRef.current;
+    if (isMobile || !canvas) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let dpr = 1;
+    const resize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+
+    const COUNT = 16;
+    const nodes = Array.from({ length: COUNT }, () => ({ x: -100, y: -100 }));
+    let mx = -100;
+    let my = -100;
+    let alive = 0;
+    let raf = 0;
+
+    const onMove = (e: PointerEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+      alive = 1;
+    };
+    const onLeave = () => {
+      alive = 0;
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      let px = mx;
+      let py = my;
+      for (let i = 0; i < COUNT; i++) {
+        const n = nodes[i]!;
+        n.x += (px - n.x) * 0.32;
+        n.y += (py - n.y) * 0.32;
+        px = n.x;
+        py = n.y;
+
+        const t = 1 - i / COUNT;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, t * 5 + 0.6, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${186 + (1 - t) * 70}, 100%, 62%, ${0.16 * t * alive})`;
+        ctx.fill();
+      }
+      raf = requestAnimationFrame(draw);
+    };
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+    document.addEventListener("pointerleave", onLeave);
+    window.addEventListener("resize", resize);
+    raf = requestAnimationFrame(draw);
+
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerleave", onLeave);
+      window.removeEventListener("resize", resize);
+      cancelAnimationFrame(raf);
+    };
+  }, [isMobile]);
+
   if (isMobile) return null;
 
   return (
     <>
+      <canvas
+        ref={trailRef}
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-[99] h-full w-full mix-blend-screen"
+      />
       <div
         ref={dotRef}
         aria-hidden
@@ -76,5 +151,6 @@ export function CustomCursor() {
     </>
   );
 }
+
 
 export default CustomCursor;
