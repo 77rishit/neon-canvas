@@ -34,6 +34,12 @@ export function Hero() {
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       const ctx = gsap.context(() => {
+        // Keep the DOM readable by default. Motion-enabled visitors get the
+        // concealed opening frame here, while reduced-motion users retain the
+        // fully visible semantic content rendered by React.
+        gsap.set("[data-hero-badge], [data-hero-word], [data-hero-item]", {
+          opacity: 0,
+        });
         const tl = gsap.timeline({ defaults: { ease: "expo.out" }, delay: 0.25 });
 
         tl.fromTo(
@@ -60,7 +66,7 @@ export function Hero() {
           { yPercent: 0, opacity: 1 },
           {
             yPercent: 10,
-            opacity: 0.35,
+            opacity: 0.82,
             ease: "none",
             immediateRender: false,
             scrollTrigger: {
@@ -77,11 +83,10 @@ export function Hero() {
         // it — the cinematic hand-off out of the hero.
         gsap.fromTo(
           "[data-hero-stage]",
-          { scale: 1, filter: "blur(0px)", opacity: 1 },
+          { scale: 1, opacity: 1 },
           {
             scale: 0.96,
-            filter: "blur(3px)",
-            opacity: 0.6,
+            opacity: 0.9,
             ease: "none",
             immediateRender: false,
             scrollTrigger: {
@@ -134,7 +139,7 @@ export function Hero() {
         <div className="max-w-4xl md:max-w-xl lg:max-w-2xl">
           <div
             data-hero-badge
-            className="inline-flex items-center gap-3 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 opacity-0"
+            className="inline-flex items-center gap-3 rounded-full border border-primary/40 bg-background/70 px-4 py-1.5 backdrop-blur-md"
           >
             <span className="relative flex h-1.5 w-1.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-70" />
@@ -153,7 +158,7 @@ export function Hero() {
                   <span
                     key={word}
                     data-hero-word
-                    className={`inline-block opacity-0 will-change-transform ${
+                    className={`inline-block will-change-transform ${
                       line.glow ? "text-gradient-neon" : "text-foreground"
                     }`}
                   >
@@ -167,7 +172,7 @@ export function Hero() {
 
           <p
             data-hero-item
-            className="mt-7 max-w-lg text-pretty text-base leading-relaxed text-muted-foreground opacity-0 md:text-lg"
+            className="mt-7 max-w-lg text-pretty text-base leading-relaxed text-foreground/80 md:text-lg"
           >
             Five days of{" "}
             <span className="text-foreground">
@@ -180,7 +185,7 @@ export function Hero() {
 
           <div
             data-hero-item
-            className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 font-display text-[0.62rem] uppercase tracking-[0.24em] text-muted-foreground opacity-0"
+            className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 font-display text-[0.62rem] uppercase tracking-[0.24em] text-foreground/70"
           >
             <span className="inline-flex items-center gap-2">
               <FiCalendar className="text-primary" /> {FEST.dates}
@@ -192,7 +197,7 @@ export function Hero() {
 
           <div
             data-hero-item
-            className="mt-10 flex flex-col gap-4 opacity-0 sm:flex-row sm:items-center"
+            className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
           >
             <Button size="lg" onClick={() => scrollToSection("#registration")}>
               Register Now
