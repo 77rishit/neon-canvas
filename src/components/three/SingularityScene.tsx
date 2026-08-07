@@ -395,7 +395,13 @@ const FRAGMENTS = 90;
 function Fragments() {
   const mesh = useRef<InstancedMesh>(null);
   const dummy = useMemo(
-    () => ({ m: new Matrix4(), q: new Quaternion(), p: new Vector3(), s: new Vector3() }),
+    () => ({
+      m: new Matrix4(),
+      q: new Quaternion(),
+      p: new Vector3(),
+      s: new Vector3(),
+      axis: new Vector3(),
+    }),
     [],
   );
   const seeds = useMemo(
@@ -428,10 +434,10 @@ function Fragments() {
         s.y * (0.7 + chaos * 0.8) + lift + Math.sin(t * 0.4 + s.drift) * 0.25,
         Math.sin(a) * r * 0.7,
       );
-      dummy.q.setFromAxisAngle(
-        new Vector3(Math.sin(s.drift), Math.cos(s.drift), 0.4).normalize(),
-        t * s.spin + s.drift,
-      );
+      // Reused axis vector: allocating inside the frame loop would hand the
+      // GC 90 objects every frame and show up as periodic stutter.
+      dummy.axis.set(Math.sin(s.drift), Math.cos(s.drift), 0.4).normalize();
+      dummy.q.setFromAxisAngle(dummy.axis, t * s.spin + s.drift);
       const sc = s.scale * (0.6 + energy * 0.8 + chaos * 0.5);
       dummy.s.setScalar(sc);
       dummy.m.compose(dummy.p, dummy.q, dummy.s);
