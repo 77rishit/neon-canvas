@@ -389,7 +389,7 @@ Computer Engineering Student
 
 Frontend Developer • React Developer • UI/UX Enthusiast
 
-GitHub: https://github.com/YOUR_USERNAME
+GitHub: https://github.com/77rishit
 
 ---
 
