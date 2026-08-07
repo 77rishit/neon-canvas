@@ -1,106 +1,257 @@
-# Neon Canvas
+# 🚀 CyberNode – Next Generation Interactive Experience
 
-You are a senior frontend engineer.
+> A cinematic, futuristic web experience built with React, Vite, GSAP, React Three Fiber and modern web technologies.
 
-Create a production-ready React + Vite project.
+![Banner](./public/preview.png)
 
-Tech Stack
+---
 
-- React 19
+## 🌌 Overview
 
-- Vite
+CyberNode is an immersive interactive website inspired by modern creative development, combining cinematic motion design, 3D experiences, and smooth storytelling into one seamless digital journey.
 
-- Tailwind CSS
+Instead of behaving like a traditional landing page, CyberNode delivers an evolving experience where every section is connected through fluid transitions, interactive animations, and dynamic visual effects.
 
-- React Three Fiber
+---
 
-- Drei
+## ✨ Features
 
-- Framer Motion
+### 🎨 Modern UI
+- Futuristic Cyberpunk Design
+- Glassmorphism
+- Responsive Layout
+- Dark Theme
+- Neon Glow Effects
+- Premium Typography
 
-- GSAP
-
+### 🎬 Motion Design
+- GSAP Animations
 - ScrollTrigger
+- Cinematic Scroll Experience
+- Smooth Page Transitions
+- Stagger Animations
+- Split Text Effects
+- Floating Elements
+- Interactive Hover Effects
 
-- Lenis Smooth Scroll
+### 🌌 Interactive Experience
+- Quantum Portal Hero
+- Animated Background
+- Dynamic Lighting
+- Mouse Parallax
+- Custom Cursor Effects
+- Live Particle System
+- Idle Animations
 
-- React Icons
+### ⚡ Performance
+- React 19
+- Vite
+- Code Splitting
+- Lazy Loading
+- GPU Accelerated Animations
+- Optimized Assets
+- 60 FPS Motion
 
-Create a clean folder structure.
+---
 
+# 🛠️ Tech Stack
+
+| Technology | Purpose |
+|------------|----------|
+| React 19 | Frontend Framework |
+| TypeScript | Type Safety |
+| Vite | Build Tool |
+| Tailwind CSS | Styling |
+| GSAP | Motion Design |
+| ScrollTrigger | Scroll Animations |
+| Lenis | Smooth Scrolling |
+| Framer Motion | UI Animations |
+| React Three Fiber | 3D Rendering |
+| Drei | Three.js Helpers |
+| React Icons | Icons |
+
+---
+
+# 📂 Project Structure
+
+```
 src/
+│
+├── animations/
+├── components/
+├── hooks/
+├── providers/
+├── sections/
+├── utils/
+├── assets/
+├── styles/
+│
+├── App.tsx
+└── main.tsx
+```
 
-    components/
+---
 
-    sections/
+# 🎯 Website Sections
 
-    hooks/
+- Hero
+- About
+- Features
+- Services
+- Timeline
+- Showcase
+- Projects
+- Testimonials
+- FAQ
+- Contact
+- Footer
 
-    utils/
+---
 
-    assets/
+# 🚀 Installation
 
-    layouts/
+Clone the repository
 
-    pages/
+```bash
+git clone https://github.com/yourusername/cybernode.git
+```
 
-    styles/
+Go inside project
 
-Configure
+```bash
+cd cybernode
+```
 
-Tailwind
+Install dependencies
 
-Framer Motion
+```bash
+npm install
+```
 
-GSAP
+Start development server
 
-Lenis
-
-React Three Fiber
-
-Create reusable Navbar, Button and Section components.
-
-Add dark cyberpunk global theme.
-
-Use CSS variables for colors.
-
-Primary:
-
-#00F5FF
-
-Secondary:
-
-#7B2EFF
-
-Background:
-
-#060611
-
-Text:
-
-#F5F5F5
-
-Generate complete project structure with installation commands.
-
-Do not build the website yet.
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/a123b2ac-8960-4a31-8c86-19c445841c7d).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+```bash
 npm run dev
 ```
+
+---
+
+# 🏗️ Build
+
+```bash
+npm run build
+```
+
+Preview production build
+
+```bash
+npm run preview
+```
+
+---
+
+# 🌐 Deployment
+
+This project is optimized for deployment on:
+
+- Vercel
+- Netlify
+- GitHub Pages
+
+Recommended:
+
+```
+Framework : Vite
+
+Build Command:
+npm run build
+
+Output Directory:
+dist
+```
+
+---
+
+# 🎨 Design Philosophy
+
+The project focuses on creating an emotional user experience rather than a conventional landing page.
+
+Core principles include:
+
+- Storytelling through motion
+- Seamless section transitions
+- Immersive interactions
+- Performance-first development
+- Responsive by default
+- Minimal yet futuristic aesthetics
+
+---
+
+# 📱 Responsive
+
+Optimized for:
+
+- Desktop
+- Laptop
+- Tablet
+- Mobile
+
+---
+
+# ⚙️ Performance Optimizations
+
+- Lazy Loading
+- Code Splitting
+- Optimized Images
+- GPU Transforms
+- Efficient React Rendering
+- Minimal Layout Shift
+- Smooth 60 FPS Animations
+
+---
+
+# 📦 Scripts
+
+```bash
+npm run dev       # Development
+
+npm run build     # Production Build
+
+npm run preview   # Preview Build
+
+npm run lint      # ESLint
+```
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to your branch
+5. Open a Pull Request
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+# 👨‍💻 Author
+
+**Rishit Patel**
+
+Computer Engineering Student
+
+Built with ❤️ using React, GSAP and modern web technologies.
+
+---
+
+## ⭐ If you like this project
+
+Give it a ⭐ on GitHub and share your feedback!
