@@ -195,7 +195,7 @@ const voidFrag = /* glsl */ `
     float tear = step(0.985 - uChaos * 0.03, fract(sin((floor(vUv.y * 140.0) + floor(t * 3.0)) * 91.7) * 4381.0));
     col += uCyan * tear * uChaos * 0.35;
 
-    col *= (0.22 + uEnergy * 0.42) * uGlow;
+    col *= (0.09 + uEnergy * 0.20) * uGlow;
     col += abs(uVel) * mix(uCyan, uViolet, 0.5) * 0.035;
     col = hueShift(col, uHue * 0.35);
     col *= smoothstep(1.45, 0.12, length(p));  // vignette keeps copy legible
@@ -267,7 +267,7 @@ const sphereFrag = /* glsl */ `
     // Holographic slicing.
     float slice = sin(vPos.y * 26.0 - uTime * 2.2) * 0.5 + 0.5;
     col = mix(col, col * (0.4 + slice), uHolo * 0.8);
-    float a = (0.10 + fres * 0.85) * (0.35 + uEnergy * 0.7) * uGlow;
+    float a = (0.02 + fres * 0.34) * (0.3 + uEnergy * 0.5) * uGlow;
     a *= 1.0 - uHolo * 0.25;
     col = hueShift(col, uHue * 0.3);
     gl_FragColor = vec4(col * (0.6 + fres), a);
@@ -288,7 +288,7 @@ function EnergySphere() {
     m.rotation.x = MathUtils.damp(m.rotation.x, Math.sin(t * 0.15) * 0.25, 1.2, delta);
     // Reality bending: the body swings off axis, then rights itself.
     m.rotation.z = MathUtils.damp(m.rotation.z, (1 - quantum.gravity) * 0.6, 1.2, delta);
-    const s = 1.35 + quantum.energy * 0.85 - quantum.chaos * 0.25;
+    const s = 0.62 + quantum.energy * 0.34 - quantum.chaos * 0.12;
     m.scale.setScalar(MathUtils.damp(m.scale.x, s, 1.6, delta));
     m.position.x = MathUtils.damp(m.position.x, quantum.pointerX * 0.7, 1.3, delta);
     m.position.y = MathUtils.damp(
@@ -300,7 +300,7 @@ function EnergySphere() {
   });
 
   return (
-    <mesh ref={mesh}>
+    <mesh ref={mesh} position={[0, 0, -3]}>
       <icosahedronGeometry args={[1.6, 24]} />
       <shaderMaterial
         uniforms={uniforms}
@@ -332,7 +332,7 @@ const monolithFrag = /* glsl */ `
     float edge = smoothstep(0.0, 0.06, uv.x) * smoothstep(1.0, 0.94, uv.x);
     vec3 col = mix(uViolet, uCyan, uv.y) * (0.12 + band * 0.9);
     col += uCyan * smoothstep(0.9, 1.0, 1.0 - abs(uv.x - 0.5) * 2.0) * 0.06;
-    float a = (0.10 + band * 0.42) * edge * (0.4 + uEnergy * 0.5) * uGlow;
+    float a = (0.04 + band * 0.2) * edge * (0.4 + uEnergy * 0.5) * uGlow;
     a *= 0.35 + uChaos * 0.9 + uHolo * 0.5;   // only present while reality bends
     col = hueShift(col, uHue * 0.3);
     gl_FragColor = vec4(col, a);
@@ -405,7 +405,7 @@ function Fragments() {
         a: Math.random() * Math.PI * 2,
         y: (Math.random() - 0.5) * 5,
         spin: (Math.random() - 0.5) * 1.2,
-        scale: 0.05 + Math.random() * 0.14,
+        scale: 0.022 + Math.random() * 0.055,
         drift: Math.random() * Math.PI * 2,
       })),
     [],
@@ -448,7 +448,7 @@ function Fragments() {
       <meshBasicMaterial
         color={CYAN}
         transparent
-        opacity={0.5}
+        opacity={0.22}
         toneMapped={false}
         blending={AdditiveBlending}
         depthWrite={false}
@@ -484,8 +484,8 @@ const dustVert = /* glsl */ `
 
     vec4 mv = modelViewMatrix * vec4(pos, 1.0);
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = (2.6 + uEnergy * 3.4) * (10.0 / -mv.z);
-    vAlpha = 0.25 + uEnergy * 0.55;
+    gl_PointSize = (1.6 + uEnergy * 2.0) * (10.0 / -mv.z);
+    vAlpha = 0.14 + uEnergy * 0.3;
   }
 `;
 

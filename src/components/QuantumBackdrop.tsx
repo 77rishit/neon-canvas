@@ -32,7 +32,7 @@ export function QuantumBackdrop() {
       <div className="absolute inset-0 bg-background" />
       {hydrated && (
         <Suspense fallback={null}>
-          <div className="absolute inset-0 opacity-80">
+          <div className="absolute inset-0 opacity-70">
             <SingularityScene reduced={reduced} />
           </div>
         </Suspense>
