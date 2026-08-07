@@ -87,10 +87,21 @@ export function CustomCursor() {
     let alive = 0;
     let raf = 0;
 
+    // The trail only costs frames while the pointer is actually moving: the
+    // loop parks itself once the comet has faded and restarts on the next move.
+    let idle = 0;
+    let running = false;
+    const start = () => {
+      if (running) return;
+      running = true;
+      raf = requestAnimationFrame(draw);
+    };
     const onMove = (e: PointerEvent) => {
       mx = e.clientX;
       my = e.clientY;
       alive = 1;
+      idle = 0;
+      start();
     };
     const onLeave = () => {
       alive = 0;
@@ -113,18 +124,26 @@ export function CustomCursor() {
         ctx.fillStyle = `hsla(${186 + (1 - t) * 70}, 100%, 62%, ${0.16 * t * alive})`;
         ctx.fill();
       }
+      idle += 1;
+      if (idle > 90) {
+        // Nothing has moved for ~1.5s — clear once and stop burning frames.
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        running = false;
+        return;
+      }
       raf = requestAnimationFrame(draw);
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
     document.addEventListener("pointerleave", onLeave);
     window.addEventListener("resize", resize);
-    raf = requestAnimationFrame(draw);
+    start();
 
     return () => {
       window.removeEventListener("pointermove", onMove);
       document.removeEventListener("pointerleave", onLeave);
       window.removeEventListener("resize", resize);
+      running = false;
       cancelAnimationFrame(raf);
     };
   }, [isMobile]);
