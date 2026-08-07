@@ -448,7 +448,7 @@ function Fragments() {
       <meshBasicMaterial
         color={CYAN}
         transparent
-        opacity={0.22}
+        opacity={0.0}
         toneMapped={false}
         blending={AdditiveBlending}
         depthWrite={false}
