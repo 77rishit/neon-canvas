@@ -405,7 +405,7 @@ function Fragments() {
         a: Math.random() * Math.PI * 2,
         y: (Math.random() - 0.5) * 5,
         spin: (Math.random() - 0.5) * 1.2,
-        scale: 0.022 + Math.random() * 0.055,
+        scale: 0.018 + Math.random() * 0.042,
         drift: Math.random() * Math.PI * 2,
       })),
     [],
@@ -448,7 +448,7 @@ function Fragments() {
       <meshBasicMaterial
         color={CYAN}
         transparent
-        opacity={0.0}
+        opacity={0.16}
         toneMapped={false}
         blending={AdditiveBlending}
         depthWrite={false}
