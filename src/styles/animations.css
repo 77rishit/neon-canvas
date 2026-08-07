@@ -306,3 +306,141 @@
     opacity: 0 !important;
   }
 }
+
+/* ---------- Living UI layer — THE DIGITAL SINGULARITY ---------- */
+
+/* Panels breathe: opacity, blur and corner geometry drift continuously so no
+   two glances at the same surface look identical. */
+@keyframes panel-breathe {
+  0% {
+    backdrop-filter: blur(16px) saturate(140%);
+    border-radius: 1rem 1.15rem 1rem 1.15rem;
+    background-color: color-mix(in srgb, var(--background) 52%, transparent);
+  }
+  33% {
+    backdrop-filter: blur(21px) saturate(165%);
+    border-radius: 1.25rem 1rem 1.3rem 1rem;
+    background-color: color-mix(in srgb, var(--background) 62%, transparent);
+  }
+  66% {
+    backdrop-filter: blur(18px) saturate(150%);
+    border-radius: 1rem 1.3rem 1rem 1.2rem;
+    background-color: color-mix(in srgb, var(--background) 56%, transparent);
+  }
+  100% {
+    backdrop-filter: blur(16px) saturate(140%);
+    border-radius: 1rem 1.15rem 1rem 1.15rem;
+    background-color: color-mix(in srgb, var(--background) 52%, transparent);
+  }
+}
+
+@utility panel-alive {
+  animation: panel-breathe 14s ease-in-out infinite;
+}
+
+/* Borders generate electricity: a travelling charge runs the perimeter even at
+   rest, and intensifies under the pointer. */
+@keyframes edge-charge {
+  0% {
+    opacity: 0.18;
+    filter: hue-rotate(0deg);
+  }
+  40% {
+    opacity: 0.4;
+  }
+  55% {
+    opacity: 0.12;
+  }
+  70% {
+    opacity: 0.46;
+    filter: hue-rotate(24deg);
+  }
+  100% {
+    opacity: 0.18;
+    filter: hue-rotate(0deg);
+  }
+}
+
+@utility edge-electric {
+  &::before {
+    animation:
+      border-spin 6s linear infinite,
+      edge-charge 5.5s ease-in-out infinite;
+    opacity: 0.22;
+  }
+  &:hover::before {
+    animation-duration: 2.6s, 1.8s;
+    opacity: 1;
+  }
+}
+
+/* Glass bends toward the cursor instead of merely lighting up. */
+@utility glass-bend {
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.35s ease;
+  &:hover {
+    filter: saturate(1.15) brightness(1.06);
+  }
+}
+
+/* Buttons emit energy: a standing halo that swells on hover. */
+@keyframes energy-emit {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.06);
+  }
+}
+
+@utility energy-field {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle at 50% 120%,
+      color-mix(in srgb, var(--primary) 45%, transparent),
+      transparent 70%
+    );
+    filter: blur(9px);
+    animation: energy-emit 4.2s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+  &:hover::before {
+    animation-duration: 1.6s;
+  }
+}
+
+/* Click shockwave — an expanding energy ring rather than a flat ripple. */
+@keyframes shockwave {
+  from {
+    transform: scale(0.15);
+    opacity: 0.9;
+    border-width: 4px;
+  }
+  to {
+    transform: scale(1);
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+@utility animate-shockwave {
+  animation: shockwave 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel-alive,
+  .edge-electric::before,
+  .energy-field::before,
+  .animate-shockwave {
+    animation: none !important;
+  }
+}
