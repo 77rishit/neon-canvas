@@ -3,8 +3,6 @@ import { HiArrowNarrowRight } from "react-icons/hi";
 import { FiCalendar, FiMapPin } from "react-icons/fi";
 import { gsap } from "@/utils/gsap";
 import { Button } from "@/components/Button";
-import { AnimatedBackground } from "@/components/AnimatedBackground";
-import { LazyHeroScene } from "@/components/three/LazyHeroScene";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { useTypingText } from "@/hooks/useTypingText";
 import { scrollToSection } from "@/utils/scroll";
@@ -115,22 +113,8 @@ export function Hero() {
         data-hero-stage
         className="relative flex min-h-dvh w-full items-center overflow-hidden md:sticky md:top-0 md:h-dvh md:min-h-0 md:will-change-transform"
       >
-      <AnimatedBackground />
 
 
-      <div
-        aria-hidden
-        data-depth="mid"
-        className="pointer-events-none absolute inset-0 z-0 opacity-60 md:left-auto md:right-0 md:w-[58%] md:opacity-95"
-        style={{
-          maskImage:
-            "radial-gradient(ellipse 72% 68% at 62% 48%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 88%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 72% 68% at 62% 48%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 88%)",
-        }}
-      >
-        <LazyHeroScene className="absolute inset-0" />
-      </div>
 
       <div
         data-hero-content
