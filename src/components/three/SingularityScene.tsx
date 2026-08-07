@@ -40,11 +40,12 @@ const VIOLET = new Color("#7b2eff");
 /* ---------------------------------------------------------- shared glsl --- */
 
 const NOISE = /* glsl */ `
+  // Sine-free hash: transcendentals are the single most expensive thing a
+  // full-screen noise field can do per pixel, and this costs a few mults.
   vec3 hash3(vec3 p) {
-    p = vec3(dot(p, vec3(127.1, 311.7, 74.7)),
-             dot(p, vec3(269.5, 183.3, 246.1)),
-             dot(p, vec3(113.5, 271.9, 124.6)));
-    return fract(sin(p) * 43758.5453123) * 2.0 - 1.0;
+    p = fract(p * vec3(0.1031, 0.1030, 0.0973));
+    p += dot(p, p.yxz + 33.33);
+    return fract((p.xxy + p.yxx) * p.zyx) * 2.0 - 1.0;
   }
   float snoise(vec3 p) {
     vec3 i = floor(p), f = fract(p);
@@ -59,9 +60,13 @@ const NOISE = /* glsl */ `
           mix(dot(hash3(i + vec3(0,1,1)), f - vec3(0,1,1)),
               dot(hash3(i + vec3(1,1,1)), f - vec3(1,1,1)), u.x), u.y), u.z);
   }
+  // Two octaves: enough for domain warping, where detail is invisible.
+  float fbm2(vec3 p) {
+    return 0.5 * snoise(p) + 0.25 * snoise(p * 2.03);
+  }
   float fbm3(vec3 p) {
     float v = 0.0, a = 0.5;
-    for (int i = 0; i < 5; i++) { v += a * snoise(p); p *= 2.03; a *= 0.5; }
+    for (int i = 0; i < 3; i++) { v += a * snoise(p); p *= 2.03; a *= 0.5; }
     return v;
   }
   vec3 hueShift(vec3 c, float a) {
@@ -160,9 +165,10 @@ const voidFrag = /* glsl */ `
 
     // Volumetric fog: two domain-warped fbm layers drifting against each other.
     vec3 q = vec3(p * 1.5, t * 0.035 + sd);
-    vec3 warp = vec3(fbm3(q * 0.9 + 3.1), fbm3(q * 0.9 - 1.7), fbm3(q * 0.7 + 8.4));
+    vec2 w2 = vec2(fbm2(q * 0.9 + 3.1), fbm2(q * 0.9 - 1.7));
+    vec3 warp = vec3(w2, w2.x * 0.6);
     float fog = fbm3(q * 1.6 + warp * (1.2 + uChaos * 1.6));
-    float fog2 = fbm3(q * 3.1 - warp * 0.8 + vec3(0.0, t * 0.05, 0.0));
+    float fog2 = fbm2(q * 3.1 - warp * 0.8 + vec3(0.0, t * 0.05, 0.0));
     float density = smoothstep(0.05, 0.85, fog * 0.7 + fog2 * 0.45) * (0.35 + uFog);
 
     // Liquid light: caustic sheets sliding through the fog.
